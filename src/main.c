@@ -186,7 +186,7 @@ void print_borrows(const LinkedList const *borrow_list);
 /*  @brief Save clients to file.
  *
  *  Save clients to file.
- *	All clients should be sorted and data in file also should be sorted.
+ *  All clients should be sorted and data in file also should be sorted.
  *
  *  @param client_list Linked list to save.
  *  @param file_name File name to save.
@@ -196,7 +196,7 @@ void save_clients(const LinkedList const *client_list, const char const *file_na
 /*  @brief Save books to file.
  *
  *  Save books to file.
- *	All books should be sorted and data in file also should be sorted.
+ *  All books should be sorted and data in file also should be sorted.
  *
  *  @param book_list Linked list to save.
  *  @param file_name File name to save.
@@ -206,7 +206,7 @@ void save_books(const LinkedList const *book_list, const char const *file_name);
 /*  @brief Save borrows to file.
  *
  *  Save borrows to file.
- *	All borrows should be sorted and data in file also should be sorted.
+ *  All borrows should be sorted and data in file also should be sorted.
  *
  *  @param borrow_list Linked list to save.
  *  @param file_name File name to save.
@@ -217,8 +217,8 @@ void save_borrows(const LinkedList const *borrow_list, const char const *file_na
 /*  @brief Insert client in the linked list.
  *
  *  Fined the current position in linked list.
- *	Create new node and add to the list.
- *	All times list should be sorted.
+ *  Create new node and add to the list.
+ *  All times list should be sorted.
  *
  *  @param client_list Linked list.
  *  @param client Client to insert.
@@ -228,8 +228,8 @@ LinkedList *insert_client(LinkedList const *client_list, const Client const *cli
 /*  @brief Insert client in the linked list.
  *
  *  Fined the current position in linked list.
- *	Create new node and add to the list.
- *	All times list should be sorted.
+ *  Create new node and add to the list.
+ *  All times list should be sorted.
  *
  *  @param client_list Linked list.
  *  @param client Client to insert.
@@ -239,8 +239,8 @@ LinkedList *insert_book(LinkedList const *book_list, const Book const book);
 /*  @brief Insert client in the linked list.
  *
  *  Fined the current position in linked list.
- *	Create new node and add to the list.
- *	All times list should be sorted.
+ *  Create new node and add to the list.
+ *  All times list should be sorted.
  *
  *  @param client_list Linked list.
  *  @param client Client to insert.
@@ -337,33 +337,33 @@ void destory_list(LinkedList *list);
 /*  @brief Destory client list.
  *
  *  Save client data to file.
- *	Free memory to list.
- *	Data in the file is sorted.
+ *  Free memory to list.
+ *  Data in the file is sorted.
  *
  *  @param client_list Linked list, it have client data.
- *	@param file_name Saving file name.
+ *  @param file_name Saving file name.
  *  @return void.
  */
 void destory_clients(LinkedList *client_list, const char const *file_name);
 /*  @brief Destory book list.
  *
  *  Save book data to file.
- *	Free memory to list.
- *	Data in the file is sorted.
+ *  Free memory to list.
+ *  Data in the file is sorted.
  *
  *  @param book_list Linked list, it have book data.
- *	@param file_name Saving file name.
+ *  @param file_name Saving file name.
  *  @return void.
  */
 void destory_books(LinkedList *book_list, const char const *file_name);
 /*  @brief Destory borrow list.
  *
  *  Save borrow data to file.
- *	Free memory to list.
- *	Data in the file is sorted.
+ *  Free memory to list.
+ *  Data in the file is sorted.
  *
  *  @param borrow_list Linked list, it have borrow data.
- *	@param file_name Saving file name.
+ *  @param file_name Saving file name.
  *  @return void.
  */
 void destory_borrows(LinkedList *borrow_list, const char const *file_name);
@@ -399,9 +399,9 @@ void destory_borrow(Borrow const *borrow);
 /*  @brief Init screens.
  *
  *  Allocate memory for screens.
- *	Set screen's type.
- *	Link screen's function pointer.
- *	Init type to init screen.
+ *  Set screen's type.
+ *  Link screen's function pointer.
+ *  Init type to init screen.
  *
  *  @param void.
  *  @return Screens* Initaled screens.
@@ -426,7 +426,7 @@ void clear_screen(void);
 /*  @brief Draw screen.
  *
  *  Fine current screen by type.
- *	Call draw function linked current screen.
+ *  Call draw function linked current screen.
  *
  *  @param screens screen data.
  *  @param data program's all data.
@@ -436,7 +436,7 @@ void draw_screen(Screens const *screens, Data const *data);
 /*  @brief Get input data and call current function.
  *
  *  Fine current screen by type.
- *	Call input function linked current screen.
+ *  Call input function linked current screen.
  *
  *  @param screens screen data.
  *  @param data program's all data.
@@ -445,7 +445,7 @@ void draw_screen(Screens const *screens, Data const *data);
 void input_screen(Screens *screens, Data *data);
 /*  @brief Destory screens.
  *
- *	Free memory to screens.
+ *  Free memory to screens.
  *
  *  @param screens screen data.
  *  @return void.
@@ -542,19 +542,19 @@ void draw_menu_admin_screen(Data const *data);
  */
 void input_menu_admin_screen(const wchar_t const *input, Data const *data);
 
-/* 	@prog Library manager
+/*   @prog Library manager
  *
- * 	Library manager program for programming team project
- *	1. Init datas.
- *	2. Clear screen.
- *	3. Draw screen.
- *	4. Get input string and processing.
- *	5. If program is running, go to step 2.
- *	6. Save all data and free the memory.
- *	7. End the program.
+ *   Library manager program for programming team project
+ *  1. Init datas.
+ *  2. Clear screen.
+ *  3. Draw screen.
+ *  4. Get input string and processing.
+ *  5. If program is running, go to step 2.
+ *  6. Save all data and free the memory.
+ *  7. End the program.
  *
- * 	@author Park Si-Yual.
- *	@recent 2018-11-03.
+ *   @author Park Si-Yual.
+ *  @recent 2018-11-03.
  */
 int main(void)
 {
