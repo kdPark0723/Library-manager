@@ -248,9 +248,9 @@ LinkedList *insert_book(LinkedList const *book_list, const Book const book);
  */
 LinkedList *insert_borrow(LinkedList const *borrow_list, const Borrow const *borrow);
 
-/*  @brief Find client by name.
+/*  @brief Find client by student number.
  *
- *  Find client by name.
+ *  Find client by student number.
  *
  *  @param client_list The client list to get client.
  *  @param student_number The client's student number.
@@ -266,31 +266,31 @@ Client *find_client_by_student_number(const LinkedList const *client_list, const
  *  @return LinkedList* Fined Book.
  */
 LinkedList *find_books_by_name(const LinkedList const *book_list, const char const *book_name);
-/*  @brief Find books by name.
+/*  @brief Find books by ISBN.
  *
- *  Find book by name.
+ *  Find book by ISBN.
  *
  *  @param book_list The book list to get book.
- *  @param book_ISBN The book ISBN.
+ *  @param book_ISBN The book's ISBN.
  *  @return LinkedList* Fined Book list.
  */
 LinkedList *find_books_by_ISBN(const LinkedList const *book_list, const char const *book_ISBN);
 /*  @brief Find books by number.
  *
- *  Find book by name.
+ *  Find book by number.
  *
  *  @param book_list The book list to get book.
  *  @param book_number The book's number.
  *  @return Book* Fined Book list.
  */
 Book *find_book_by_number(const LinkedList const *book_list, const char const *book_number);
-/*  @brief Find borrow by number.
+/*  @brief Find borrow by client and book.
  *
  *  Find borrow by client and book.
  *
- *  @param book_list The book list to get book.
- *  @param book_number The book's number.
- *  @return Book* Fined Book list.
+ *  @param client The client to get borrow.
+ *  @param book The book to get borrow.
+ *  @return Borrow* Fined Borrow.
  */
 Borrow *find_borrow(Client const *client, Book const *book);
 
@@ -411,10 +411,11 @@ Screens *init_screens(void);
  *
  *  Change screens's type
  *
+ *  @param screens The screens to change.
  *  @param type The type to change.
  *  @return void.
  */
-void change_screen(char type);
+void change_screen(Screens const *screens, char type);
 /*  @brief Clear screen.
  *
  *  Clear screen.
@@ -567,7 +568,8 @@ int main(void)
     data.screens = init_screens();
 
     data.is_running = 1;
-    while (data.is_running) {
+    while (data.is_running)
+    {
         clear_screen();
         draw_screen(data.screens, &data);
         input_screen(data.screens, &data);
