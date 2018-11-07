@@ -847,7 +847,20 @@ void draw_menu_member_screen(Data const *data)
         L"\n"
         L"번호를 선택하세요: ");
 }
-void input_menu_member_screen(const wchar_t const *input, Data const *data) { }
+void input_menu_member_screen(const wchar_t const *input, Data const *data)
+{
+    if (input == NULL || data == NULL)
+        return;
+
+    switch (input[0])
+    {
+    case L'6':
+        data->is_running = 0;
+        break;
+    default:
+        break;
+    }
+}
 
 void draw_menu_admin_screen(Data const *data)
 {
@@ -860,4 +873,17 @@ void draw_menu_admin_screen(Data const *data)
         L"\n"
         L"번호를 선택하세요: ");
 }
-void input_menu_admin_screen(const wchar_t const *input, Data const *data) { }
+void input_menu_admin_screen(const wchar_t const *input, Data const *data)
+{
+    if (input == NULL || data == NULL)
+        return;
+
+    switch (input[0])
+    {
+    case L'8':
+        data->is_running = 0;
+        break;
+    default:
+        break;
+    }
+}
