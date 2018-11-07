@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include <wchar.h>
 #include <time.h>
+#include <unistd.h>
 
 /*  Screen type define
  *
@@ -26,6 +29,14 @@
 
 #define SIZE_BOOK_NUMBER 7
 #define SIZE_ISBN 13
+
+#define SIZE_INPUT_MAX 100
+
+/* String const
+ */
+#define STRING_CLIENT_FILE "client"
+#define STRING_BOOK_FILE "book"
+#define STRING_BORROW_FILE "borrow"
 
 struct _LinkedList
 {
@@ -70,6 +81,7 @@ typedef struct Data
     struct Screens* screens;
     Client* login_client;
     _Bool is_running;
+    _Bool is_admin;
 } Data;
 
 typedef struct Screen
@@ -256,7 +268,7 @@ LinkedList *insert_borrow(LinkedList const *borrow_list, const Borrow const *bor
  *  @param student_number The client's student number.
  *  @return Client* Fined client.
  */
-Client *find_client_by_student_number(const LinkedList const *client_list, const char const *student_number);
+Client *find_client_by_student_number(const LinkedList const *client_list, const wchar_t const *student_number);
 /*  @brief Find books by name.
  *
  *  Find book by name.
@@ -265,7 +277,7 @@ Client *find_client_by_student_number(const LinkedList const *client_list, const
  *  @param book_name The book name.
  *  @return LinkedList* Fined Book.
  */
-LinkedList *find_books_by_name(const LinkedList const *book_list, const char const *book_name);
+LinkedList *find_books_by_name(const LinkedList const *book_list, const wchar_t const *book_name);
 /*  @brief Find books by ISBN.
  *
  *  Find book by ISBN.
@@ -274,7 +286,7 @@ LinkedList *find_books_by_name(const LinkedList const *book_list, const char con
  *  @param book_ISBN The book's ISBN.
  *  @return LinkedList* Fined Book list.
  */
-LinkedList *find_books_by_ISBN(const LinkedList const *book_list, const char const *book_ISBN);
+LinkedList *find_books_by_ISBN(const LinkedList const *book_list, const wchar_t const *book_ISBN);
 /*  @brief Find books by number.
  *
  *  Find book by number.
@@ -283,7 +295,7 @@ LinkedList *find_books_by_ISBN(const LinkedList const *book_list, const char con
  *  @param book_number The book's number.
  *  @return Book* Fined Book list.
  */
-Book *find_book_by_number(const LinkedList const *book_list, const char const *book_number);
+Book *find_book_by_number(const LinkedList const *book_list, const wchar_t const *book_number);
 /*  @brief Find borrow by client and book.
  *
  *  Find borrow by client and book.
@@ -443,7 +455,7 @@ void draw_screen(Screens const *screens, Data const *data);
  *  @param data program's all data.
  *  @return void.
  */
-void input_screen(Screens *screens, Data *data);
+void input_screen(Screens *screens, Data const *data);
 /*  @brief Destory screens.
  *
  *  Free memory to screens.
@@ -561,9 +573,11 @@ int main(void)
 {
     Data data;
 
-    data.clients = init_clients("client");
-    data.books = init_books("book");
-    data.borrows = init_borrows("borrow");
+    setlocale(LC_ALL , "");
+
+    data.clients = init_clients(STRING_CLIENT_FILE);
+    data.books = init_books(STRING_BOOK_FILE);
+    data.borrows = init_borrows(STRING_BORROW_FILE);
 
     data.screens = init_screens();
 
@@ -575,11 +589,275 @@ int main(void)
         input_screen(data.screens, &data);
     }
 
-    destory_clients(data.clients, "client");
-    destory_books(data.books, "book");
-    destory_borrows(data.borrows, "borrow");
+    destory_clients(data.clients, STRING_CLIENT_FILE);
+    destory_books(data.books, STRING_BOOK_FILE);
+    destory_borrows(data.borrows, STRING_BORROW_FILE);
 
     destory_screens(data.screens);
 
     return 0;
 }
+
+
+LinkedList *init_clients(const char const *file_name) { }
+LinkedList *init_books(const char const *file_name) { }
+LinkedList *init_borrows(const char const *file_name) { }
+
+Borrow *create_book(wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location) { }
+Borrow *create_borrow(Client const *client, Book const *book) { }
+
+void print_client(const Client const *client) { }
+void print_book(const Book const *book) { }
+void print_borrow(const Borrow const *borrow) { }
+
+void print_clients(const LinkedList const *client_list) { }
+void print_books(const LinkedList const *book_list) { }
+void print_borrows(const LinkedList const *borrow_list) { }
+
+void save_clients(const LinkedList const *client_list, const char const *file_name) { }
+void save_books(const LinkedList const *book_list, const char const *file_name) { }
+void save_borrows(const LinkedList const *borrow_list, const char const *file_name) { }
+
+LinkedList *insert_client(LinkedList const *client_list, const Client const *client) { }
+LinkedList *insert_book(LinkedList const *book_list, const Book const book) { }
+LinkedList *insert_borrow(LinkedList const *borrow_list, const Borrow const *borrow) { }
+
+Client *find_client_by_student_number(const LinkedList const *client_list, const wchar_t const *student_number) { }
+LinkedList *find_books_by_name(const LinkedList const *book_list, const wchar_t const *book_name) { }
+LinkedList *find_books_by_ISBN(const LinkedList const *book_list, const wchar_t const *book_ISBN) { }
+Book *find_book_by_number(const LinkedList const *book_list, const wchar_t const *book_number) { }
+Borrow *find_borrow(Client const *client, Book const *book) { }
+
+void remove_client(LinkedList const *client_list, Client const *client) { }
+void remove_book(LinkedList const *book_list, Book const *book) { }
+void remove_borrow(LinkedList const *borrow_list, Borrow const *borrow) { }
+
+void destory_list(LinkedList *list) { }
+
+void destory_clients(LinkedList *client_list, const char const *file_name) { }
+void destory_books(LinkedList *book_list, const char const *file_name) { }
+void destory_borrows(LinkedList *borrow_list, const char const *file_name) { }
+
+void destory_client(Client const *client) { }
+void destory_book(Book const *book) { }
+void destory_borrow(Borrow const *borrow) { }
+
+Screens *init_screens(void)
+{
+    Screens *screens = malloc(sizeof(Screens));
+    screens->type = SCREEN_INIT;
+
+    screens->screens[SCREEN_INIT].type = SCREEN_INIT;
+    screens->screens[SCREEN_INIT].draw = draw_init_screen;
+    screens->screens[SCREEN_INIT].input = input_init_screen;
+
+    screens->screens[SCREEN_MENU_ADMIN].type = SCREEN_MENU_ADMIN;
+    screens->screens[SCREEN_MENU_ADMIN].draw = draw_menu_admin_screen;
+    screens->screens[SCREEN_MENU_ADMIN].input = input_menu_admin_screen;
+
+    screens->screens[SCREEN_MENU_MEMBER].type = SCREEN_MENU_MEMBER;
+    screens->screens[SCREEN_MENU_MEMBER].draw = draw_menu_member_screen;
+    screens->screens[SCREEN_MENU_MEMBER].input = input_menu_member_screen;
+    
+    screens->screens[SCREEN_SIGN_IN].type = SCREEN_SIGN_IN;
+    screens->screens[SCREEN_SIGN_IN].draw = draw_sign_in_screen;
+    screens->screens[SCREEN_SIGN_IN].input = input_sign_in_screen;
+    
+    screens->screens[SCREEN_SIGN_UP].type = SCREEN_SIGN_UP;
+    screens->screens[SCREEN_SIGN_UP].draw = draw_sign_up_screen;
+    screens->screens[SCREEN_SIGN_UP].input = input_sign_up_screen;
+
+    return screens;
+}
+void change_screen(Screens const *screens, char type)
+{
+    screens->type = type;
+}
+void clear_screen(void)
+{
+    printf("\x1B[2J\x1B[1;1H");
+}
+void draw_screen(Screens const *screens, Data const *data)
+{
+    screens->screens[screens->type].draw(data)
+}
+void input_screen(Screens *screens, Data const *data)
+{
+    wchar_t input[SIZE_INPUT_MAX] = { 0 };
+    wscanf(L"%s", input);
+
+    screens->screens[screens->type].input(input, data);
+}
+void destory_screens(Screens *screens)
+{
+    if (screens != NULL)
+        free(screens);
+}
+
+void draw_init_screen(Data const *data) 
+{
+    wprintf(
+        L">> 도서관 서비스 <<\n"
+        L"1. 회원 가입           2. 로그인           3. 프로그램 종료\n"
+        L"번호를 선택하세요: ");
+}
+void input_init_screen(const wchar_t const *input, Data const *data)
+{
+    if (input == NULL || data == NULL)
+        return;
+    if (data->is_admin)
+        data->is_admin = 0;
+
+    switch (input[0])
+    {
+    case L'1':
+        change_screen(data->screens, SCREEN_SIGN_UP);
+        break;
+    case L'2':
+        change_screen(data->screens, SCREEN_SIGN_IN);
+        break;
+    case L'3':
+        data->is_running = 0;
+        break;
+    default:
+        break;
+    }
+}
+
+void draw_sign_up_screen(Data const *data)
+{
+    wprintf(
+        L">> 회원 가입 <<\n"
+        L"학번, 비밀번호, 이름, 주소, 전화번호를 입력하세요.\n"
+        L"\n"
+        L"학번: ");
+}
+void input_sign_up_screen(const wchar_t const *input, Data const *data)
+{
+    if (input == NULL || data == NULL)
+        return;
+    wchar_t input_tmp[SIZE_INPUT_MAX] = { 0 };
+    wchar_t *input_p = NULL;
+    size_t len = 0;
+
+    Client *client = malloc(sizeof(Client));
+
+    len = wcslen(input);
+    input_p = malloc(sizeof(wchar_t) * (len + 1));
+    wcscpy(input_p, input);
+    client->student_number = input_p;
+
+    wprintf(L"비밀번호: ");
+    wscanf(L"%s", input_tmp);
+    len = wcslen(input_tmp);
+    input_p = malloc(sizeof(wchar_t) * (len + 1));
+    wcscpy(input_p, input_tmp);
+    client->password = input_p;
+
+    wprintf(L"이름: ");
+    wscanf(L"%s", input_tmp);
+    len = wcslen(input_tmp);
+    input_p = malloc(sizeof(wchar_t) * (len + 1));
+    wcscpy(input_p, input_tmp);
+    client->name = input_p;
+
+    wprintf(L"주소: ");
+    wscanf(L"%s", input_tmp);
+    len = wcslen(input_tmp);
+    input_p = malloc(sizeof(wchar_t) * (len + 1));
+    wcscpy(input_p, input_tmp);
+    client->address = input_p;
+
+    wprintf(L"전화번호: ");
+    wscanf(L"%s", input_tmp);
+    len = wcslen(input_tmp);
+    input_p = malloc(sizeof(wchar_t) * (len + 1));
+    wcscpy(input_p, input_tmp);
+    client->phone_number = input_p;
+
+    insert_client(data->clients, client);
+    save_clients(data->clients, STRING_CLIENT_FILE);
+    wprintf(L"회원가입이 되셨습니다.");
+    sleep(1);
+    change_screen(data->screens, SCREEN_INIT);
+}
+
+void draw_sign_in_screen(Data const *data)
+{
+    wprintf(
+        L">> 로그인 <<\n"
+        L"학번: ");
+}
+void input_sign_in_screen(const wchar_t const *input, Data const *data)
+{
+    if (input == NULL || data == NULL)
+        return;
+    wchar_t input_tmp[SIZE_INPUT_MAX] = { 0 };
+
+    Client *client = find_client_by_student_number(data->clients, input);
+
+    if (client == NULL)
+    {
+        if (wcscmp(L"admin", input) == 0)
+        {
+            data->is_admin = 1;
+        }
+        else
+        {
+            wprintf(L"회원정보가 없습니다.");
+            sleep(1);
+            change_screen(data->screens, SCREEN_INIT);
+
+            return;
+        }
+    }
+
+    wprintf(L"비밀번호: ");
+    wscanf(L"%s", input_tmp);
+
+    if (data->is_admin)
+    {
+        wprintf(L"로그인이 되셨습니다.");
+        sleep(1);
+        change_screen(data->screens, SCREEN_MENU_ADMIN);
+        return;
+    }
+    if (wcscmp(client->password, input_tmp) == 0)
+    {
+        data->login_client = client;
+        wprintf(L"로그인이 되셨습니다.");
+        sleep(1);
+        change_screen(data->screens, SCREEN_MENU_MEMBER);
+    }
+    else
+    {
+        wprintf(L"잘못된 비밀번호입니다.");
+        sleep(1);
+        change_screen(data->screens, SCREEN_INIT);
+    }
+}
+
+void draw_menu_member_screen(Data const *data)
+{
+    wprintf(
+        L">> 회원 메뉴 <<\n"
+        L"1. 도서 검색           2. 내 대여 목록\n"
+        L"3. 개인정보 수정       4. 회원 탈퇴\n"
+        L"5. 로그아웃            6. 프로그램 종료\n"
+        L"\n"
+        L"번호를 선택하세요: ");
+}
+void input_menu_member_screen(const wchar_t const *input, Data const *data) { }
+
+void draw_menu_admin_screen(Data const *data)
+{
+    wprintf(
+        L">> 관리자 메뉴 <<\n"
+        L"1. 도서 등록           2. 도서 삭제\n"
+        L"3. 도서 대여           4. 도서 반납\n"
+        L"5. 도서 검색           6. 회원 목록\n"
+        L"7. 로그아웃            8. 프로그램 종료\n"
+        L"\n"
+        L"번호를 선택하세요: ");
+}
+void input_menu_admin_screen(const wchar_t const *input, Data const *data) { }
