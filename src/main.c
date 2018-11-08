@@ -127,14 +127,15 @@ LinkedList *init_borrows(const char const *file_name);
  *  Create book by ISBN, publisher, author, location and name.
  *  Book's number and availability are specified in this function.
  *
+ *  @param book_list The book list to fine book numbet to use.
  *  @param name The book's name.
  *  @param publisher The book's publisher.
  *  @param author The book's author.
  *  @param ISBN The book's ISBN.
  *  @param location The book's location.
- *  @return Borrow* new borrow made by datas.
+ *  @return Book* new Book made by datas.
  */
-Borrow *create_book(wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location);
+Book *create_book(const LinkedList const *book_list, wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location);
 /*  @brief Create borrow.
  *
  *  Create borrow by client and book.
@@ -597,7 +598,6 @@ int main(void)
 
     return 0;
 }
-
 
 LinkedList *init_clients(const char const *file_name) { }
 LinkedList *init_books(const char const *file_name) { }
