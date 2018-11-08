@@ -248,7 +248,7 @@ LinkedList *insert_client(LinkedList const *client_list, const Client const *cli
  *  @param client Client to insert.
  *  @return LinkedList* Linked list's first member.
  */
-LinkedList *insert_book(LinkedList const *book_list, const Book const book);
+LinkedList *insert_book(LinkedList const *book_list, const Book const *book);
 /*  @brief Insert client in the linked list.
  *
  *  Fined the current position in linked list.
@@ -619,7 +619,7 @@ void save_books(const LinkedList const *book_list, const char const *file_name) 
 void save_borrows(const LinkedList const *borrow_list, const char const *file_name) { }
 
 LinkedList *insert_client(LinkedList const *client_list, const Client const *client) { }
-LinkedList *insert_book(LinkedList const *book_list, const Book const book) { }
+LinkedList *insert_book(LinkedList const *book_list, const Book const *book) { }
 LinkedList *insert_borrow(LinkedList const *borrow_list, const Borrow const *borrow) { }
 
 Client *find_client_by_student_number(const LinkedList const *client_list, const wchar_t const *student_number) { }
