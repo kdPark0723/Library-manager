@@ -23,8 +23,13 @@
 #define SCREEN_SIGN_IN 2
 #define SCREEN_MENU_MEMBER 3
 #define SCREEN_MENU_ADMIN 4
-#define SCREEN_FIND_BOOK 5
-#define SCREEN_MAX 6
+#define SCREEN_REGIST_BOOK 5
+#define SCREEN_REMOVE_BOOK 6
+#define SCREEN_BORROW_BOOK 7
+#define SCREEN_RETURN_BOOK 8
+#define SCREEN_FIND_BOOK 9
+#define SCREEN_MODIFY_CLIENT 10
+#define SCREEN_MAX 11
 
 /*  String size define
  */
@@ -588,6 +593,78 @@ void draw_menu_admin_screen(Data const *data);
  */
 void input_menu_admin_screen(const wchar_t const *input, Data const *data);
 
+/*  @brief Draw regist book screen.
+ *
+ *  Draw regist book screen.
+ *
+ *  @param data program's all data.
+ *  @return void.
+ */
+void draw_regist_book_screen(Data const *data);
+/*  @brief Process regist book screen's input data.
+ *
+ *  Process regist book screen's input data.
+ *
+ *  @param input Input string.
+ *  @param data Program's all data.
+ *  @return void.
+ */
+void input_regist_book_screen(const wchar_t const *input, Data const *data);
+
+/*  @brief Draw remove book screen.
+ *
+ *  Draw remove book screen.
+ *
+ *  @param data program's all data.
+ *  @return void.
+ */
+void draw_remove_book_screen(Data const *data);
+/*  @brief Process remove book screen's input data.
+ *
+ *  Process remove book screen's input data.
+ *
+ *  @param input Input string.
+ *  @param data Program's all data.
+ *  @return void.
+ */
+void input_remove_book_screen(const wchar_t const *input, Data const *data);
+
+/*  @brief Draw borrow book screen.
+ *
+ *  Draw borrow book screen.
+ *
+ *  @param data program's all data.
+ *  @return void.
+ */
+void draw_borrow_book_screen(Data const *data);
+/*  @brief Process borrow book screen's input data.
+ *
+ *  Process borrow book screen's input data.
+ *
+ *  @param input Input string.
+ *  @param data Program's all data.
+ *  @return void.
+ */
+void input_borrow_book_screen(const wchar_t const *input, Data const *data);
+
+/*  @brief Draw return book screen.
+ *
+ *  Draw return book screen.
+ *
+ *  @param data program's all data.
+ *  @return void.
+ */
+void draw_return_book_screen(Data const *data);
+/*  @brief Process return book screen's input data.
+ *
+ *  Process return book screen's input data.
+ *
+ *  @param input Input string.
+ *  @param data Program's all data.
+ *  @return void.
+ */
+void input_return_book_screen(const wchar_t const *input, Data const *data);
+
 /*  @brief Draw find book screen.
  *
  *  Draw find book screen.
@@ -596,15 +673,33 @@ void input_menu_admin_screen(const wchar_t const *input, Data const *data);
  *  @return void.
  */
 void draw_find_book_screen(Data const *data);
-/*  @brief Process menu admin screen's input data.
+/*  @brief Process find book screen's input data.
  *
- *  Process menu admin screen's input data.
+ *  Process find book screen's input data.
  *
  *  @param input Input string.
  *  @param data Program's all data.
  *  @return void.
  */
 void input_find_book_screen(const wchar_t const *input, Data const *data);
+
+/*  @brief Draw modify client screen.
+ *
+ *  Draw modify client screen.
+ *
+ *  @param data program's all data.
+ *  @return void.
+ */
+void draw_modify_client_screen(Data const *data);
+/*  @brief Process modify client screen's input data.
+ *
+ *  Process modify client screen's input data.
+ *
+ *  @param input Input string.
+ *  @param data Program's all data.
+ *  @return void.
+ */
+void input_modify_client_screen(const wchar_t const *input, Data const *data);
 
 /*   @prog Library manager
  *
@@ -1086,13 +1181,28 @@ void input_menu_admin_screen(const wchar_t const *input, Data const *data)
     case L'5':
         change_screen(data->screens, SCREEN_FIND_BOOK);
         return;
+    case L'7':
+        change_screen(data->screens, SCREEN_INIT);
+        return;
     case L'8':
         data->is_running = 0;
-        break;
+        return;
     default:
-        break;
+        return;
     }
 }
+
+void draw_regist_book_screen(Data const *data) { }
+void input_regist_book_screen(const wchar_t const *input, Data const *data) { }
+
+void draw_remove_book_screen(Data const *data) { }
+void input_remove_book_screen(const wchar_t const *input, Data const *data) { }
+
+void draw_borrow_book_screen(Data const *data) { }
+void input_borrow_book_screen(const wchar_t const *input, Data const *data) { }
+
+void draw_return_book_screen(Data const *data) { }
+void input_return_book_screen(const wchar_t const *input, Data const *data) { }
 
 void draw_find_book_screen(Data const *data)
 {
@@ -1147,3 +1257,6 @@ void input_find_book_screen(const wchar_t const *input, Data const *data)
     print_books(current_books);
     sleep(3);
 }
+
+void draw_modify_client_screen(Data const *data) { }
+void input_modify_client_screen(const wchar_t const *input, Data const *data) { }
