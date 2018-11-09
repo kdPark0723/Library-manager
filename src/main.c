@@ -881,9 +881,30 @@ void print_borrow(const Borrow const *borrow)
 	return;
 }
 
-void print_clients(const LinkedList const *client_list) { }
-void print_books(const LinkedList const *book_list) { }
-void print_borrows(const LinkedList const *borrow_list) { }
+void print_clients(const LinkedList const *client_list) {
+    LinkedList * current = client_list;
+    while (current !=NULL){
+        print_client (current->contents);
+        current =current->next;
+    }
+    return;
+}
+void print_books(const LinkedList const *book_list) {
+    LinkedList * current -> book_list;
+    while (currnet != NULL){
+        print_book (current->contents);
+        current = current->next;
+    }
+    return;
+}
+void print_borrows(const LinkedList const *borrow_list) {
+    LinkedList * current -> borrow_list;
+    while (current != NULL){
+        print_borrow (current->contents);
+        current = current -> next;
+    }
+    return ;
+}
 
 void save_clients(const LinkedList const *client_list, const char const *file_name) { }
 void save_books(const LinkedList const *book_list, const char const *file_name) { }
