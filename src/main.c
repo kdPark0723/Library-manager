@@ -908,13 +908,60 @@ void remove_borrow(LinkedList const *borrow_list, Borrow const *borrow) { }
 
 void destroy_list(LinkedList *list) { }
 
-void destroy_clients(LinkedList *client_list, const char const *file_name) { }
-void destroy_books(LinkedList *book_list, const char const *file_name) { }
-void destroy_borrows(LinkedList *borrow_list, const char const *file_name) { }
+void destroy_clients(LinkedList *client_list, const char const *file_name) {
+    LinkedList * current =client_list;
+    save_clients(client_list,file_name);
+    while (current != NULL){
+        destroy_client((Client *)current->contents);
+        current = current -> next;
+    }
+    destroy_list(client_list);
+}
 
-void destroy_client(Client const *client) { }
-void destroy_book(Book const *book) { }
-void destroy_borrow(Borrow const *borrow) { }
+void destroy_books(LinkedList *book_list, const char const *file_name) {
+    LinkedList * current=book_list;
+    save_books(book_list,file_name);
+    while (current != NULL){
+        destroy_book((Book *)current->contents);
+	current = current -> next;
+    }
+    destroy_list(book_list);
+}
+
+void destroy_borrows(LinkedList *borrow_list, const char const *file_name) {
+    LinkedList * current=borrow_list;
+    save_borrows(borrow_list,file_name);
+    while (current != NULL){
+        destroy_borrow((Borrow *)current->contents);
+	current = current ->next;
+    }
+    destroy_list(borrow_list); 
+}
+
+void destroy_client(Client const *client) {
+    if (client!=NULL){
+	    free(client->password);
+	    free(client->name);
+	    free(client->address);
+	    free(client);
+    }
+}
+
+void destroy_book(Book const *book) {
+    if (book!=NULL){
+        free(book->name);
+        free(book->publisher);
+        free(book->author);
+        free(book->location);
+        free(book);
+    } 
+}
+void destroy_borrow(Borrow const *borrow) {
+    if (borrow !=NULL){
+	    free(borrow->book_name);
+	    free(borrow);
+    }
+}
 
 Screens *init_screens(void)
 {
