@@ -134,7 +134,7 @@ LinkedList *init_borrows(const char const *file_name);
  *  @param location The book's location.
  *  @return Borrow* new borrow made by datas.
  */
-Book *create_book(wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location);
+Book *create_book(wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location,const LinkedList const *book_list);
 /*  @brief Create borrow.
  *
  *  Create borrow by client and book.
@@ -168,7 +168,7 @@ void print_book(const Book const *book);
  *  @param borrow Borrow pointer to print.
  *  @return void.
  */
-void print_borrow(const Borrow const *borrow);
+void print_borrow(const Borrow const *borrow,const LinkedList const * book_list);
 
 /*  @brief Print All clients.
  *
@@ -236,7 +236,7 @@ void save_borrows(const LinkedList const *borrow_list, const char const *file_na
  *  @param client Client to insert.
  *  @return LinkedList* Linked list's first member.
  */
-LinkedList *insert_client(LinkedList const *client_list, const Client const *client);
+LinkedList *insert_client(LinkedList *client_list, const Client const *client);
 /*  @brief Insert client in the linked list.
  *
  *  Fined the current position in linked list.
@@ -247,7 +247,7 @@ LinkedList *insert_client(LinkedList const *client_list, const Client const *cli
  *  @param client Client to insert.
  *  @return LinkedList* Linked list's first member.
  */
-LinkedList *insert_book(LinkedList const *book_list, const Book const *book);
+LinkedList *insert_book(LinkedList *book_list, const Book const *book);
 /*  @brief Insert client in the linked list.
  *
  *  Fined the current position in linked list.
@@ -258,7 +258,7 @@ LinkedList *insert_book(LinkedList const *book_list, const Book const *book);
  *  @param client Client to insert.
  *  @return LinkedList* Linked list's first member.
  */
-LinkedList *insert_borrow(LinkedList const *borrow_list, const Borrow const *borrow);
+LinkedList *insert_borrow(LinkedList *borrow_list, const Borrow const *borrow);
 
 /*  @brief Find client by student number.
  *
@@ -603,7 +603,7 @@ LinkedList *init_clients(const char const *file_name) { }
 LinkedList *init_books(const char const *file_name) { }
 LinkedList *init_borrows(const char const *file_name) { }
 
-Book *create_book(wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location) {
+Book *create_book(wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location,const LinkedList const *book_list) {
 	Book * book_p=(Book *)malloc(sizeof(Book));
 	book_p->name = name;
 	book_p->publisher = publisher;
@@ -611,8 +611,18 @@ Book *create_book(wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *I
 	book_p->location = location;
 	wcscpy(book_p->ISBN, ISBN);
 	book_p->availability = 'Y';
-	/* 도서번호는 마지막으로 등록한 책의 번호+1 이여야하는데 이 함수는 마지막으로 등록한 책의 번호를 알수 없어서 당장은 못만듬
-	 * 나중에 매개변수로 데이터파일을 설정하든지 아니면 다른방법을 찾아볼거임 */
+	LinkedList * current = book_list->next;//여기서부터는 가장 최근의(큰) 도서번호를 구하는 과정임
+	LinkedList * latest = current;
+	int c;
+	while (current!= NULL)	{
+		c=wcscmp(((Book *)current->contents)->number,((Book *)latest->contents)->number);
+		if (c>0)
+			latest=current;
+		current=current->next;
+	}
+	char a [8];
+	wcstombs(a,((Book *)latest->contents)->number,8);
+	swprintf(book_p->number,7,L"%07d",atoi(a)+1);
 	return book_p;
 }
 
@@ -642,12 +652,12 @@ void print_book(const Book const *book) {
 	printf("대여가능 여부 : %c \n", book->availability);
 	return;
 }
-void print_borrow(const Borrow const *borrow) {
+void print_borrow(const Borrow const *borrow,const LinkedList const * book_list ) {
 	struct tm * loan_, *return_;
 	loan_ = localtime(&(borrow->loan_date));
 	return_ = localtime(&(borrow->return_date));
 	printf("도서번호 : %s \n", borrow->book_number);
-	//printf("도서명 : %s \n", 이거 book데이터도 매개변수에 있어야함 도서명은 borrow에 저장 안함
+	printf("도서명 : %s \n", find_book_by_number(book_list,borrow->book_number)->name);
 	printf("대여일자 : %d년 %d월 %d일 ", loan_->tm_year + 1900, loan_->tm_mon + 1, loan_->tm_mday);
 	switch (loan_->tm_wday) {
 	case 0:
@@ -736,7 +746,7 @@ void save_clients(const LinkedList const *client_list, const char const *file_na
 void save_books(const LinkedList const *book_list, const char const *file_name) { }
 void save_borrows(const LinkedList const *borrow_list, const char const *file_name) { }
 
-LinkedList *insert_client(LinkedList const *client_list, const Client const *client) {
+LinkedList *insert_client(LinkedList *client_list, const Client const *client) {
 	LinkedList * current = client_list->next;
 	LinkedList * past = client_list;
 	LinkedList *new_p = (LinkedList *)malloc(sizeof(LinkedList));
@@ -769,7 +779,7 @@ LinkedList *insert_client(LinkedList const *client_list, const Client const *cli
 	}
 	return client_list;
 }
-LinkedList *insert_book(LinkedList const *book_list, const Book const *book) {
+LinkedList *insert_book(LinkedList  *book_list, const Book const *book) {
 	LinkedList * current = book_list->next;
 	LinkedList * past = book_list;
 	LinkedList *new_p = (LinkedList *)malloc(sizeof(LinkedList));
@@ -799,7 +809,7 @@ LinkedList *insert_book(LinkedList const *book_list, const Book const *book) {
 	}
 	return book_list;
 }
-LinkedList *insert_borrow(LinkedList const *borrow_list, const Borrow const *borrow) {
+LinkedList *insert_borrow(LinkedList *borrow_list, const Borrow const *borrow) {
 	LinkedList * current = borrow_list->next;
 	LinkedList * past = borrow_list;
 	LinkedList *new_p = (LinkedList *)malloc(sizeof(LinkedList));
