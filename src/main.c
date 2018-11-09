@@ -984,10 +984,7 @@ void input_sign_in_screen(const wchar_t const *input, Data const *data)
         {
             client = malloc(sizeof(Client));
 
-            len = wcslen(input);
-            wchar_t *input_p = malloc(sizeof(wchar_t) * (len + 1));
-            wcscpy(input_p, input);
-            client->student_number = input_p;
+            wcscpy(client->student_number, input);
 
             insert_client(data->clients, client);
             save_clients(data->clients, STRING_CLIENT_FILE);
@@ -1052,6 +1049,7 @@ void input_menu_member_screen(const wchar_t const *input, Data const *data)
         change_screen(data->screens, SCREEN_FIND_BOOK);
         return;
     case L'2':
+        clear_screen();
         wprintf(L">> 내 대여 목록 <<\n");
         print_borrows(find_borrows_by_client(data->clients));
         sleep(3);
