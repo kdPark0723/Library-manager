@@ -136,7 +136,7 @@ LinkedList *init_borrows(const char const *file_name);
  *  @param location The book's location.
  *  @return Book* new Book made by datas.
  */
-Book *create_book(const LinkedList const *book_list, wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location);
+Book *create_book(const LinkedList const *book_list, const wchar_t const *name, const wchar_t const *publisher, const wchar_t const *author, const wchar_t const *ISBN, const wchar_t const *location);
 /*  @brief Create borrow.
  *
  *  Create borrow by client and book.
@@ -604,7 +604,7 @@ LinkedList *init_clients(const char const *file_name) { }
 LinkedList *init_books(const char const *file_name) { }
 LinkedList *init_borrows(const char const *file_name) { }
 
-Book *create_book(const LinkedList const *book_list, wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location);
+Book *create_book(const LinkedList const *book_list, const wchar_t const *name, const wchar_t const *publisher, const wchar_t const *author, const wchar_t const *ISBN, const wchar_t const *location)
 {
     Book *book_p = malloc(sizeof(Book));
     int len;
