@@ -923,7 +923,7 @@ void destroy_books(LinkedList *book_list, const char const *file_name) {
     save_books(book_list,file_name);
     while (current != NULL){
         destroy_book((Book *)current->contents);
-	current = current -> next;
+        current = current -> next;
     }
     destroy_list(book_list);
 }
@@ -933,7 +933,7 @@ void destroy_borrows(LinkedList *borrow_list, const char const *file_name) {
     save_borrows(borrow_list,file_name);
     while (current != NULL){
         destroy_borrow((Borrow *)current->contents);
-	current = current ->next;
+        current = current ->next;
     }
     destroy_list(borrow_list); 
 }
