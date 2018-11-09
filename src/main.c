@@ -8,6 +8,9 @@
 
 /*  Screen type define
  *
+ *  If you want to get new input, you should make screen.
+ *  If you not want to get new input, you shouldn't make screen.
+ * 
  *  If you want add new screen, try following steps.
  *  1. Add new define for new screen.
  *  2. Change other define, all define should have another number.
