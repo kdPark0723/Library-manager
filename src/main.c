@@ -69,6 +69,7 @@ typedef struct Borrow
 {
     wchar_t student_number[SIZE_STUDENT_NUMBER+1];
     wchar_t book_number[SIZE_BOOK_NUMBER+1];
+    wchar_t *book_name;
     time_t loan_date;
     time_t return_date;
 } Borrow;
@@ -603,12 +604,127 @@ LinkedList *init_clients(const char const *file_name) { }
 LinkedList *init_books(const char const *file_name) { }
 LinkedList *init_borrows(const char const *file_name) { }
 
-Borrow *create_book(wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location) { }
-Borrow *create_borrow(Client const *client, Book const *book) { }
+Book *create_book(const LinkedList const *book_list, wchar_t *name, wchar_t *publisher, wchar_t *author, wchar_t *ISBN, wchar_t *location);
+{
+    Book *book_p = malloc(sizeof(Book));
+
+	book_p->name = name;
+	book_p->publisher = publisher;
+	book_p->author = author;
+	book_p->location = location;
+	wcscpy(book_p->ISBN, ISBN);
+	book_p->availability = L'Y';
+
+	LinkedList *current = book_list->next;//여기서부터는 가장 최근의(큰) 도서번호를 구하는 과정임
+	LinkedList *largest = current;
+
+	while (current != NULL)	{
+		if (wcscmp(((Book *)current->contents)->number, ((Book *)largest->contents)->number) > 0)
+			largest = current;
+		current = current->next;
+	}
+
+	int largest_num;
+	swscanf((Book *)largest->contents)->number, L"%d", &largest_num);
+	swprintf(book_p->number, SIZE_BOOK_NUMBER + 1, L"%07d", largest_num + 1);
+
+	return book_p;
+}
+Borrow *create_borrow(Client const *client, Book const *book)
+{
+    Borrow * borrow_p = (Borrow *)malloc(sizeof(Borrow));
+    borrow_p->loan_date = time(NULL);
+	struct tm *t;
+	t = localtime(&borrow_p->loan_date);
+
+	wcscpy(borrow_p->student_number, client->student_number);
+	wcscpy(borrow_p->book_number, book->number);
+
+	
+	if ((t->tm_wday + 30) / 7 == 0) //(t->tm_wday+30)/7==30일 뒤의 요일
+		borrow_p->return_date = borrow_p->loan_date + 31 * 24 * 60 * 60;
+	else
+		borrow_p->return_date = borrow_p->loan_date + 30 * 24 * 60 * 60;
+
+	return borrow_p;
+}
 
 void print_client(const Client const *client) { }
-void print_book(const Book const *book) { }
-void print_borrow(const Borrow const *borrow) { }
+void print_book(const Book const *book)
+{
+    wprintf(
+        L"도서명 : %ls \n"
+	    L"출판사 : %ls \n"
+	    L"저자명 : %ls \n"
+	    L"ISBN : %ls \n"
+	    L"소장처 : %ls \n"
+	    L"대여가능 여부 : %lc \n",
+        book->name, book->publisher, book->author, book->ISBN, book->location book->availability);
+	return;
+}
+void print_borrow(const Borrow const *borrow)
+{
+    struct tm * loan_, *return_;
+	loan_ = localtime(&(borrow->loan_date));
+	return_ = localtime(&(borrow->return_date));
+	printf("도서번호 : %s \n", borrow->book_number);
+	printf("도서명 : %s \n", find_book_by_number(book_list,borrow->book_number)->name);
+	printf("대여일자 : %d년 %d월 %d일 ", loan_->tm_year + 1900, loan_->tm_mon + 1, loan_->tm_mday);
+	switch (loan_->tm_wday) {
+	case 0:
+		printf("일요일");
+		break;
+	case 1:
+		printf("월요일");
+		break;
+	case 2:
+		printf("화요일");
+		break;
+	case 3:
+		printf("수요일");
+		break;
+	case 4:
+		printf("목요일");
+		break;
+	case 5:
+		printf("금요일");
+		break;
+	case 6:
+		printf("토요일");
+		break;
+	default:
+		;
+	}
+	printf("\n");
+	printf("반납일자 : %d년 %d월 %d일 ", return_->tm_year + 1900, return_->tm_mon + 1, return_->tm_mday);
+	switch (return_->tm_wday) {
+	case 0:
+		printf("일요일");
+		break;
+	case 1:
+		printf("월요일");
+		break;
+	case 2:
+		printf("화요일");
+		break;
+	case 3:
+		printf("수요일");
+		break;
+	case 4:
+		printf("목요일");
+		break;
+	case 5:
+		printf("금요일");
+		break;
+	case 6:
+		printf("토요일");
+		break;
+	default:
+		;
+	}
+	printf("\n");
+	return;
+}
 
 void print_clients(const LinkedList const *client_list) { }
 void print_books(const LinkedList const *book_list) { }
@@ -684,7 +800,7 @@ void draw_screen(Screens const *screens, Data const *data)
 void input_screen(Screens *screens, Data const *data)
 {
     wchar_t input[SIZE_INPUT_MAX] = { 0 };
-    wscanf(L"%s", input);
+    wscanf(L"%ls", input);
 
     screens->screens[screens->type].input(input, data);
 }
@@ -748,28 +864,28 @@ void input_sign_up_screen(const wchar_t const *input, Data const *data)
     client->student_number = input_p;
 
     wprintf(L"비밀번호: ");
-    wscanf(L"%s", input_tmp);
+    wscanf(L"%ls", input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->password = input_p;
 
     wprintf(L"이름: ");
-    wscanf(L"%s", input_tmp);
+    wscanf(L"%ls", input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->name = input_p;
 
     wprintf(L"주소: ");
-    wscanf(L"%s", input_tmp);
+    wscanf(L"%ls", input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->address = input_p;
 
     wprintf(L"전화번호: ");
-    wscanf(L"%s", input_tmp);
+    wscanf(L"%ls", input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
@@ -813,7 +929,7 @@ void input_sign_in_screen(const wchar_t const *input, Data const *data)
     }
 
     wprintf(L"비밀번호: ");
-    wscanf(L"%s", input_tmp);
+    wscanf(L"%ls", input_tmp);
 
     if (data->is_admin)
     {
