@@ -749,7 +749,7 @@ LinkedList *init_clients(const char *file_name) {
     ifp = fopen(file_name,"r+");
     LinkedList * client_list=NULL;
     while (ftell(ifp) != EOF)
-    client_list =init_client(file_pointer,client_list);
+        client_list =init_client(ifp,client_list);
     fclose(ifp);
     return client_list;
 }
@@ -770,7 +770,7 @@ LinkdeList * init_client (File * file_pointer,LinkedList client_list){
         client_list = node;
         node ->next = NULL;
     }
-    fscanf(ifp,"%ls |%ls |%ls |%ls |%ls |",input [0],input [1],input [2],input [3],input [4]);
+    fscanf(file_pointer,"%ls | %ls | %ls | %ls | %ls | ",input [0],input [1],input [2],input [3],input [4]);
     Client * client= (Client *)malloc(sizeof(Client));
     wcscpy(client->student_number,input [0]);
     client -> password = (wchar_t *)malloc(wcslen(input [1])+1);
