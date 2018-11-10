@@ -931,38 +931,46 @@ void remove_borrow(LinkedList const *borrow_list, Borrow const *borrow) { }
 
 void destroy_list(LinkedList *list) { }
 
-void destroy_clients(LinkedList *client_list, const char const *file_name) {
-    LinkedList * current =client_list;
-    save_clients(client_list,file_name);
-    while (current != NULL){
+void destroy_clients(LinkedList *client_list, const char const *file_name)
+{
+    LinkedList * current = client_list;
+    save_clients(client_list, file_name);
+    while (current != NULL)
+    {
         destroy_client((Client *)current->contents);
         current = current -> next;
     }
     destroy_list(client_list);
 }
 
-void destroy_books(LinkedList *book_list, const char const *file_name) {
-    LinkedList * current=book_list;
+void destroy_books(LinkedList *book_list, const char const *file_name)
+{
+    LinkedList * current = book_list;
     save_books(book_list,file_name);
-    while (current != NULL){
+    while (current != NULL)
+    {
         destroy_book((Book *)current->contents);
         current = current -> next;
     }
     destroy_list(book_list);
 }
 
-void destroy_borrows(LinkedList *borrow_list, const char const *file_name) {
-    LinkedList * current=borrow_list;
-    save_borrows(borrow_list,file_name);
-    while (current != NULL){
+void destroy_borrows(LinkedList *borrow_list, const char const *file_name)
+{
+    LinkedList * current = borrow_list;
+    save_borrows(borrow_list, file_name);
+    while (current != NULL)
+    {
         destroy_borrow((Borrow *)current->contents);
         current = current ->next;
     }
     destroy_list(borrow_list); 
 }
 
-void destroy_client(Client const *client) {
-    if (client!=NULL){
+void destroy_client(Client const *client)
+{
+    if (client != NULL)
+    {
         if (client->password != NULL)
             free(client->password);
 	    if (client->name != NULL)
@@ -973,21 +981,25 @@ void destroy_client(Client const *client) {
     }
 }
 
-void destroy_book(Book const *book) {
-    if (book!=NULL){
+void destroy_book(Book const *book)
+{
+    if (book != NULL)
+    {
         if (book->name != NULL)
             free(book->name);
         if (book->publisher != NULL)
             free(book->publisher);
         if (book->author != NULL)
             free(book->author);
-        if (book->location
+        if (book->location != NULL)
             free(book->location);
         free(book);
     } 
 }
-void destroy_borrow(Borrow const *borrow) {
-    if (borrow !=NULL){
+void destroy_borrow(Borrow const *borrow)
+{
+    if (borrow != NULL)
+    {
 	    if (borrow->book_name != NULL)
             free(borrow->book_name);
 	    free(borrow);
