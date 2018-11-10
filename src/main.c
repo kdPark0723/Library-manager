@@ -351,9 +351,9 @@ Borrow *find_borrow(Client *client, Book *book);
  *
  *  @param client_list The client list to remove client.
  *  @param client The client will be removed.
- *  @return void.
+ *  @return LinkedList * Linked list's first node.
  */
-void remove_client(LinkedList *client_list, Client *client);
+LinkedList *remove_client(LinkedList *client_list, Client *client);
 /*  @brief remove book to book list.
  *
  *  Find book and remove the list.
@@ -361,9 +361,9 @@ void remove_client(LinkedList *client_list, Client *client);
  *
  *  @param book_list The book list to remove book.
  *  @param book The book will be removed.
- *  @return void.
+ *  @return LinkedList * Linked list's first node.
  */
-void remove_book(LinkedList *book_list, Book *book);
+LinkedList *remove_book(LinkedList *book_list, Book *book);
 /*  @brief remove borrow to borrow list.
  *
  *  Find borrow and remove the list.
@@ -371,9 +371,9 @@ void remove_book(LinkedList *book_list, Book *book);
  *
  *  @param borrow_list The borrow list to remove borrow.
  *  @param borrow The borrow will be removed.
- *  @return void.
+  *  @return LinkedList * Linked list's first node.
  */
-void remove_borrow(LinkedList *borrow_list, Borrow *borrow);
+LinkedList *remove_borrow(LinkedList *borrow_list, Borrow *borrow);
 
 /*  @brief Free memory for list.
  *
@@ -1080,9 +1080,9 @@ Book *find_book_by_number(const LinkedList *book_list, const wchar_t *book_numbe
 LinkedList *find_borrows_by_client(Client *client) { }
 Borrow *find_borrow(Client *client, Book *book) { }
 
-void remove_client(LinkedList *client_list, Client *client) { }
-void remove_book(LinkedList *book_list, Book *book) { }
-void remove_borrow(LinkedList *borrow_list, Borrow *borrow) { }
+LinkedList *remove_client(LinkedList *client_list, Client *client) { }
+LinkedList *remove_book(LinkedList *book_list, Book *book) { }
+LinkedList *remove_borrow(LinkedList *borrow_list, Borrow *borrow) { }
 
 void destroy_list(LinkedList *list) { }
 
@@ -1408,10 +1408,11 @@ void input_menu_member_screen(const wchar_t *input, Data *data)
         change_screen(data->screens, SCREEN_MODIFY_CLIENT);
         return;
     case L'4':
+        data->clients = remove_client(data->clients, data->login_client);
         change_screen(data->screens, SCREEN_INIT);
         return;
     case L'5':
-        data->is_running = 0;
+        change_screen(data->screens, SCREEN_INIT);
         return;
     case L'6':
         data->is_running = 0;
