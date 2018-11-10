@@ -971,7 +971,7 @@ LinkedList *insert_client(LinkedList *client_list, Client *client)
     LinkedList *front_member = NULL;
 
     LinkedList *node = malloc(sizeof(LinkedList));
-    node->contents = (void*)client;
+    node->contents = (void *)client;
 
     while (current_member != NULL)
     {  
@@ -987,14 +987,16 @@ LinkedList *insert_client(LinkedList *client_list, Client *client)
             if (front_member != NULL)
             {
                 front_member->next = node;
-                current_member = node;
+                client_list = node;
             }
             
             break;
         }
     }
+    if (current_member == NULL)
+        front_member->next = node;
 
-    return current_member;
+    return client_list;
 }
 LinkedList *insert_book(LinkedList *book_list, Book *book) { }
 LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow) { }
