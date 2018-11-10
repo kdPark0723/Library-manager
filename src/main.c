@@ -998,7 +998,15 @@ LinkedList *insert_client(LinkedList *client_list, Client *client)
 
     return client_list;
 }
-LinkedList *insert_book(LinkedList *book_list, Book *book) { }
+LinkedList *insert_book(LinkedList *book_list, Book *book)
+{
+    LinkedList *node = malloc(sizeof(LinkedList));
+    node->contents = (void *)(book);
+
+    node->next = book_list;
+
+    return node;
+}
 LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow) { }
 
 Client *find_client_by_student_number(const LinkedList *client_list, const wchar_t *student_number) { }
@@ -1236,7 +1244,7 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     wcscpy(input_p, input_tmp);
     client->phone_number = input_p;
 
-    insert_client(data->clients, client);
+    data->clients = insert_client(data->clients, client);
     save_clients(data->clients, STRING_CLIENT_FILE);
     wprintf(L"회원가입이 되셨습니다.\n");
     sleep(1);
@@ -1265,7 +1273,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
 
             wcscpy(client->student_number, input);
 
-            insert_client(data->clients, client);
+            data->clients = insert_client(data->clients, client);
             save_clients(data->clients, STRING_CLIENT_FILE);
         }
 
