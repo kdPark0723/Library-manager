@@ -749,7 +749,7 @@ LinkedList *init_clients(const char *file_name) {
     fopen(file_name,"r+");
     LinkedList * client_list=NULL;
     while (ftell(ifp) != EOF)
-        init_client(file_pointer,client_list)
+    client_list =init_client(file_pointer,client_list)
     fclose(ifp);
     return client_list;
 }
@@ -778,8 +778,8 @@ LinkdeList * init_client (File * file_pointer,LinkedList client_list){
     client -> name = (wchar_t *)malloc(wcslen(input[2])+1);
     wcscpy(client->name,input [2]);
     client -> address = (wchar_t *)malloc(wcslen(input[3])+1);
-    wcscpy(client->address,input [3]+1);
-    wcscpy(client->phone_number ,input[4]+1);
+    wcscpy(client->address,input [3]);
+    wcscpy(client->phone_number ,input[4]);
     node->contents = (void *)client;
     return client_list;
 }    
