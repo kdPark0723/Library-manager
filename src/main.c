@@ -787,18 +787,20 @@ Borrow *create_borrow(Client const *client, Book const *book)
 {
     Borrow * borrow_p = (Borrow *)malloc(sizeof(Borrow));
     borrow_p->loan_date = time(NULL);
-	struct tm *t;
-	t = localtime(&borrow_p->loan_date);
+    struct tm *t;
+    t = localtime(&borrow_p->loan_date);
 
-	wcscpy(borrow_p->student_number, client->student_number);
-	wcscpy(borrow_p->book_number, book->number);
+    wcscpy(borrow_p->student_number, client->student_number);
+    wcscpy(borrow_p->book_number, book->number);
 	
-	if ((t->tm_wday + 30) / 7 == 0) //(t->tm_wday+30)/7==30일 뒤의 요일
-		borrow_p->return_date = borrow_p->loan_date + 31 * 24 * 60 * 60;
-	else
-		borrow_p->return_date = borrow_p->loan_date + 30 * 24 * 60 * 60;
+    if ((t->tm_wday + 30) / 7 == 0) //(t->tm_wday+30)/7==30일 뒤의 요일
+        borrow_p->return_date = borrow_p->loan_date + 31 * 24 * 60 * 60;
+    else
+        borrow_p->return_date = borrow_p->loan_date + 30 * 24 * 60 * 60;
+    borrow_p->book_name = malloc(sizeof(wchar_t)*wcslen(book->name))
+	wcscpy(borrow_p->book_name,book->name);
 
-	return borrow_p;
+    return borrow_p;
 }
 
 void print_client(const Client const *client) { }
@@ -961,13 +963,13 @@ void destroy_borrows(LinkedList *borrow_list, const char const *file_name) {
 
 void destroy_client(Client const *client) {
     if (client!=NULL){
-            if (client->password != NULL)
-                free(client->password);
+        if (client->password != NULL)
+            free(client->password);
 	    if (client->name != NULL)
-                free(client->name);
+            free(client->name);
 	    if (client->address != NULL)
-                free(client->address);
-            free(client);
+            free(client->address);
+        free(client);
     }
 }
 
