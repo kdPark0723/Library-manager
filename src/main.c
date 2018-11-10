@@ -1050,22 +1050,9 @@ LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow)
         return NULL;
     LinkedList *node = malloc(sizeof(LinkedList));
     node->contents = (void *)borrow;
-    
-    if (book_list == NULL)
-        return node;
-    
-    LinkedList *current = borrow_list;
-    LinkedList *front = NULL;
-    while (current != NULL)
-    {
-        front = current;
-        current = current->next;
-    }
-    if (current == NULL){
-        front->next = node;
-        node->next = NULL;
-    }
-    return borrow_list;
+    node->next = borrow_list;
+
+    return node;
 }
 
 Client *find_client_by_student_number(const LinkedList *client_list, const wchar_t *student_number)
