@@ -771,7 +771,8 @@ Book *create_book(const LinkedList *book_list, const wchar_t *name, const wchar_
     LinkedList *current = book_list->next;//여기서부터는 가장 최근의(큰) 도서번호를 구하는 과정임
     LinkedList *largest = current;
 
-    while (current != NULL)	{
+    while (current != NULL)
+    {
         if (wcscmp(((Book *)current->contents)->number, ((Book *)largest->contents)->number) > 0)
             largest = current;
         current = current->next;
@@ -814,7 +815,6 @@ void print_book(const Book *book)
         L"소장처 : %ls \n"
         L"대여가능 여부 : %lc \n",
         book->name, book->publisher, book->author, book->ISBN, book->location book->availability);
-    return;
 }
 void print_borrow(const Borrow *borrow)
 {
@@ -882,29 +882,30 @@ void print_borrow(const Borrow *borrow)
     default:
         break;
     }
-
-    return;
 }
 
 void print_clients(const LinkedList *client_list) {
-    LinkedList * current = client_list;
-    while (current !=NULL){
+    LinkedList *current = client_list;
+    while (current !=NULL
+    ){
         print_client (current->contents);
         current =current->next;
     }
     return;
 }
 void print_books(const LinkedList *book_list) {
-    LinkedList * current -> book_list;
-    while (currnet != NULL){
+    LinkedList *current -> book_list;
+    while (currnet != NULL)
+    {
         print_book (current->contents);
         current = current->next;
     }
     return;
 }
 void print_borrows(const LinkedList *borrow_list) {
-    LinkedList * current -> borrow_list;
-    while (current != NULL){
+    LinkedList *current -> borrow_list;
+    while (current != NULL)
+    {
         print_borrow (current->contents);
         current = current -> next;
     }
@@ -1013,10 +1014,12 @@ Client *find_client_by_student_number(const LinkedList *client_list, const wchar
 {
     LinkedList * current = client_list;
     Client * client;
-    while (current != NULL) {
+    while (current != NULL)
+    {
         if (wcscmp(((Client *)current->contents)->student_number, student_number) != 0)
             current = current->next;
-        else {
+        else 
+        {
             client = ((Client *)current->contents);
             return client;
         }
