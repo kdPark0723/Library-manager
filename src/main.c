@@ -746,10 +746,10 @@ int main(void)
 
 LinkedList *init_clients(const char *file_name) {
     File *ifp;
-    fopen(file_name,"r+");
+    ifp = fopen(file_name,"r+");
     LinkedList * client_list=NULL;
     while (ftell(ifp) != EOF)
-    client_list =init_client(file_pointer,client_list)
+    client_list =init_client(file_pointer,client_list);
     fclose(ifp);
     return client_list;
 }
