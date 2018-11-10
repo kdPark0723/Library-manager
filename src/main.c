@@ -1221,6 +1221,7 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
         wprintf(L"이미 존재하는 학번입니다.\n");
         sleep(1);
         change_screen(data->screens, SCREEN_INIT);
+        return;
     }
     wchar_t input_tmp[SIZE_INPUT_MAX] = { 0 };
     wchar_t *input_p = NULL;
@@ -1358,6 +1359,15 @@ void input_menu_member_screen(const wchar_t *input, Data *data)
         print_borrows(find_borrows_by_client(data->clients));
         sleep(3);
         return;
+    case L'3':
+        change_screen(data->screens, SCREEN_MODIFY_CLIENT);
+        return;
+    case L'4':
+        change_screen(data->screens, SCREEN_INIT);
+        return;
+    case L'5':
+        data->is_running = 0;
+        return;
     case L'6':
         data->is_running = 0;
         return;
@@ -1384,8 +1394,24 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
 
     switch (input[0])
     {
+    case L'1':
+        change_screen(data->screens, SCREEN_REGIST_BOOK);
+        return;
+    case L'2':
+        change_screen(data->screens, SCREEN_REMOVE_BOOK);
+        return;
+    case L'3':
+        change_screen(data->screens, SCREEN_BORROW_BOOK);
+        return;
+    case L'4':
+        change_screen(data->screens, SCREEN_RETURN_BOOK);
+        return;
     case L'5':
         change_screen(data->screens, SCREEN_FIND_BOOK);
+        return;
+    case L'6':
+        print_clients(data->clients);
+        sleep(3);
         return;
     case L'7':
         change_screen(data->screens, SCREEN_INIT);
@@ -1464,5 +1490,46 @@ void input_find_book_screen(const wchar_t *input, Data *data)
     sleep(3);
 }
 
-void draw_modify_client_screen(Data *data) { }
-void input_modify_client_screen(const wchar_t *input, Data *data) { }
+void draw_modify_client_screen(Data *data)
+{
+    wprintf(
+        L">> 개인정보 수정 <<\n"
+        L"이름: ");
+}
+void input_modify_client_screen(const wchar_t *input, Data *data)
+{
+    wchar_t input_tmp[SIZE_INPUT_MAX] = { 0 };
+    wchar_t *input_p = NULL;
+    size_t len = 0;
+
+    if (data->login_client->name != NULL)
+        free(data->login_client->name);
+    if (data->login_client->address != NULL)
+        free(data->login_client->address);
+    if (data->login_client->phone_number != NULL)
+        free(data->login_client->phone_number);
+
+    len = wcslen(input);
+    input_p = malloc(sizeof(wchar_t) * (len + 1));
+    wcscpy(input_p, input);
+    data->login_client->name = input_p;
+
+    wprintf(L"주소: ");
+    wscanf(L"%ls", input_tmp);
+    len = wcslen(input_tmp);
+    input_p = malloc(sizeof(wchar_t) * (len + 1));
+    wcscpy(input_p, input_tmp);
+    data->login_client->address = input_p;
+
+    wprintf(L"전화번호: ");
+    wscanf(L"%ls", input_tmp);
+    len = wcslen(input_tmp);
+    input_p = malloc(sizeof(wchar_t) * (len + 1));
+    wcscpy(input_p, input_tmp);
+    data->login_client->phone_number = input_p;
+
+    save_clients(data->clients, STRING_CLIENT_FILE);
+    wprintf(L"개인정보 수정이 되셨습니다.\n");
+    sleep(1);
+    change_screen(data->screens, SCREEN_MENU_MEMBER);
+}
