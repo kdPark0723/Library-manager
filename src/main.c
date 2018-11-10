@@ -1044,7 +1044,24 @@ LinkedList *insert_book(LinkedList *book_list, Book *book)
 
     return book_list;
 }
-LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow) { }
+LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow) {
+    if (borrow_list == NULL || borrow == NULL)
+        return NULL;
+    
+    LinkedList *current = borrow_list;
+    LinkedList *front = NULL;
+    LinkedList *node = malloc(sizeof(LinkedList));
+    node->contents = (void *)borrow;
+    while (current !=NULL){
+        front = current;
+        current = current->next;
+    }
+    if (current == NULL){
+        front->next = node;
+        node->next = NULL;
+    }
+    return borrow_list;
+}
 
 Client *find_client_by_student_number(const LinkedList *client_list, const wchar_t *student_number)
 {
