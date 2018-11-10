@@ -1009,7 +1009,21 @@ LinkedList *insert_book(LinkedList *book_list, Book *book)
 }
 LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow) { }
 
-Client *find_client_by_student_number(const LinkedList *client_list, const wchar_t *student_number) { }
+Client *find_client_by_student_number(const LinkedList *client_list, const wchar_t *student_number)
+{
+    LinkedList * current = client_list;
+    Client * client;
+    while (current != NULL) {
+        if (wcscmp(((Client *)current->contents)->student_number, student_number) != 0)
+            current = current->next;
+        else {
+            client = ((Client *)current->contents);
+            return client;
+        }
+    }
+    printf("일치하는 학생번호가 없습니다\n"); //current=NULL 임
+    return 0;
+}
 LinkedList *find_books_by_name(const LinkedList *book_list, const wchar_t *book_name) { }
 LinkedList *find_books_by_ISBN(const LinkedList *book_list, const wchar_t *book_ISBN) { }
 LinkedList *find_books_by_author(const LinkedList *book_list, const wchar_t *book_author) { }
