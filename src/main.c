@@ -79,7 +79,7 @@ typedef struct Borrow
     wchar_t student_number[SIZE_STUDENT_NUMBER+1];
     wchar_t book_number[SIZE_BOOK_NUMBER+1];
     wchar_t *book_name;
-    time_t loan_date;
+    time_t loandate;
     time_t return_date;
 } Borrow;
 
@@ -786,17 +786,17 @@ Book *create_book(const LinkedList const *book_list, const wchar_t const *name, 
 Borrow *create_borrow(Client const *client, Book const *book)
 {
     Borrow * borrow_p = (Borrow *)malloc(sizeof(Borrow));
-    borrow_p->loan_date = time(NULL);
+    borrow_p->loandate = time(NULL);
     struct tm *t;
-    t = localtime(&borrow_p->loan_date);
+    t = localtime(&borrow_p->loandate);
 
     wcscpy(borrow_p->student_number, client->student_number);
     wcscpy(borrow_p->book_number, book->number);
 	
     if ((t->tm_wday + 30) / 7 == 0) //(t->tm_wday+30)/7==30일 뒤의 요일
-        borrow_p->return_date = borrow_p->loan_date + 31 * 24 * 60 * 60;
+        borrow_p->return_date = borrow_p->loandate + 31 * 24 * 60 * 60;
     else
-        borrow_p->return_date = borrow_p->loan_date + 30 * 24 * 60 * 60;
+        borrow_p->return_date = borrow_p->loandate + 30 * 24 * 60 * 60;
     borrow_p->book_name = malloc(sizeof(wchar_t)*wcslen(book->name))
 	wcscpy(borrow_p->book_name,book->name);
 
@@ -818,15 +818,18 @@ void print_book(const Book const *book)
 }
 void print_borrow(const Borrow const *borrow)
 {
-    struct tm * loan_, *return_;
-	loan_ = localtime(&(borrow->loan_date));
-	return_ = localtime(&(borrow->return_date));
+    struct tm * loan_tm, *return_tm;
+
+	loan_tm = localtime(&(borrow->loan_date));
+	return_tm = localtime(&(borrow->return_date));
+
 	wprintf(
         L"도서번호 : %s \n"
 	    L"도서명 : %s \n"
 	    L"대여일자 : %d년 %d월 %d일 ",
-        borrow->book_number, borrow->book_name, loan_->tm_year + 1900, loan_->tm_mon + 1, loan_->tm_mday);
-	switch (loan_->tm_wday)
+        borrow->book_number, borrow->book_name, loan_tm->tm_year + 1900, loan_tm->tm_mon + 1, loan_tm->tm_mday);
+
+	switch (loan_tm->tm_wday)
     {
 	case 0:
 		wprintf(L"일요일\n");
@@ -852,8 +855,8 @@ void print_borrow(const Borrow const *borrow)
 	default:
 		break;
 	}
-	wprintf(L"반납일자 : %d년 %d월 %d일 ", return_->tm_year + 1900, return_->tm_mon + 1, return_->tm_mday);
-	switch (loan_->tm_wday)
+	wprintf(L"반납일자 : %d년 %d월 %d일 ", return_tm->tm_year + 1900, return_tm->tm_mon + 1, return_tm->tm_mday);
+	switch (loan_tm->tm_wday)
     {
 	case 0:
 		wprintf(L"일요일\n");
@@ -909,8 +912,54 @@ void print_borrows(const LinkedList const *borrow_list) {
 }
 
 void save_clients(const LinkedList const *client_list, const char const *file_name) { }
-void save_books(const LinkedList const *book_list, const char const *file_name) { }
-void save_borrows(const LinkedList const *borrow_list, const char const *file_name) { }
+void save_books(const LinkedList const *book_list, const char const *file_name)
+{
+    if (book_list == NULL)
+        return;
+
+    FILE *file = NULL;
+    file = fopen(file_name, "w+");
+    if (file == NULL)
+        return;
+    
+    LinkedList *current_member = book_list;
+    Book *book = current_member->contents;
+    
+    while (current_member != NULL)
+    {  
+        fwprintf(file,
+            L"%ls | %ls | %ls | %ls | %ls | %ls | %lc | ",
+            book->number, book->name, book->publisher, book->author, book->ISBN, book->location book->availability);
+
+        current_member = current_member->next;
+        book = current_member->contents;
+    }
+    fclose(file);
+}
+void save_borrows(const LinkedList const *borrow_list, const char const *file_name)
+{
+    if (borrow_list == NULL)
+        return;
+
+    FILE *file = NULL;
+    file = fopen(file_name, "w+");
+    if (file == NULL)
+        return;
+    
+    LinkedList *current_member = borrow_list;
+    Borrow *borrow = current_member->contents;
+    
+    while (current_member != NULL)
+    {  
+        fwprintf(file,
+            L"%ls | %ls | %lld | %lld | ",
+            borrow->book_name, borrow->book_number, (long long)(borrow->loandate), (long long)(borrow->return_date));
+
+        current_member = current_member->next;
+        borrow = current_member->contents;
+    }
+    fclose(file);
+}
 
 LinkedList *insert_client(LinkedList const *client_list, const Client const *client) { }
 LinkedList *insert_book(LinkedList const *book_list, const Book const *book) { }
