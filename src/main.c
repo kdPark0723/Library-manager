@@ -884,7 +884,8 @@ void print_borrow(const Borrow *borrow)
     }
 }
 
-void print_clients(const LinkedList *client_list) {
+void print_clients(const LinkedList *client_list)
+{
     LinkedList *current = client_list;
     while (current !=NULL
     ){
@@ -893,7 +894,8 @@ void print_clients(const LinkedList *client_list) {
     }
     return;
 }
-void print_books(const LinkedList *book_list) {
+void print_books(const LinkedList *book_list)
+{
     LinkedList *current -> book_list;
     while (currnet != NULL)
     {
@@ -902,7 +904,8 @@ void print_books(const LinkedList *book_list) {
     }
     return;
 }
-void print_borrows(const LinkedList *borrow_list) {
+void print_borrows(const LinkedList *borrow_list)
+{
     LinkedList *current -> borrow_list;
     while (current != NULL)
     {
@@ -964,15 +967,18 @@ void save_borrows(const LinkedList *borrow_list, const char *file_name)
 
 LinkedList *insert_client(LinkedList *client_list, Client *client)
 {
-    if (client_list == NULL || client == NULL)
+    if (client == NULL)
         return NULL;
+
+    LinkedList *node = malloc(sizeof(LinkedList));
+    node->contents = (void *)client;
+    
+    if (client_list == NULL)
+        return node;
 
     LinkedList *current_member = client_list;
     Client *current_client = client_list->contents;
     LinkedList *front_member = NULL;
-
-    LinkedList *node = malloc(sizeof(LinkedList));
-    node->contents = (void *)client;
 
     while (current_member != NULL)
     {  
@@ -1001,12 +1007,42 @@ LinkedList *insert_client(LinkedList *client_list, Client *client)
 }
 LinkedList *insert_book(LinkedList *book_list, Book *book)
 {
+    if (book == NULL)
+        return NULL;
     LinkedList *node = malloc(sizeof(LinkedList));
-    node->contents = (void *)(book);
+    node->contents = (void *)book;
+    
+    if (book_list == NULL)
+        return node;
 
-    node->next = book_list;
+    LinkedList *current_member = book_list;
+    Book *current_book = book_list->contents;
+    LinkedList *front_member = NULL;
 
-    return node;
+    while (current_member != NULL)
+    {  
+        if (wcscmp(current_book->ISBN, book->ISBN) < 0)
+        {
+            front_member = current_member;
+            current_member = current_member->next;
+            current_book = current_member->contents;
+        }
+        else
+        {
+            node->next = current_member;
+            if (front_member != NULL)
+            {
+                front_member->next = node;
+                book_list = node;
+            }
+            
+            break;
+        }
+    }
+    if (current_member == NULL)
+        front_member->next = node;
+
+    return book_list;
 }
 LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow) { }
 
