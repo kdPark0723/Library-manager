@@ -797,8 +797,8 @@ Borrow *create_borrow(Client *client, Book *book)
         borrow_p->return_date = borrow_p->loandate + 31 * 24 * 60 * 60;
     else
         borrow_p->return_date = borrow_p->loandate + 30 * 24 * 60 * 60;
-    borrow_p->book_name = malloc(sizeof(wchar_t)*wcslen(book->name))
-    wcscpy(borrow_p->book_name,book->name);
+    borrow_p->book_name = malloc(sizeof(wchar_t) * (wcslen(book->name) + 1));
+    wcscpy(borrow_p->book_name, book->name);
 
     return borrow_p;
 }
