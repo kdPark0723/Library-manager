@@ -1397,28 +1397,30 @@ void input_menu_member_screen(const wchar_t *input, Data *data)
     {
     case L'1':
         change_screen(data->screens, SCREEN_FIND_BOOK);
-        return;
+        break;
     case L'2':
         clear_screen();
         wprintf(L">> 내 대여 목록 <<\n");
         print_borrows(find_borrows_by_client(data->clients));
         sleep(3);
-        return;
+        break;
     case L'3':
         change_screen(data->screens, SCREEN_MODIFY_CLIENT);
-        return;
+        break;
     case L'4':
         data->clients = remove_client(data->clients, data->login_client);
+        data->login_client = NULL;
+        save_clients(data->clients, STRING_CLIENT_FILE);
         change_screen(data->screens, SCREEN_INIT);
-        return;
+        break;
     case L'5':
         change_screen(data->screens, SCREEN_INIT);
-        return;
+        break;
     case L'6':
         data->is_running = 0;
-        return;
+        break;
     default:
-        return;
+        break;
     }
 }
 
@@ -1442,31 +1444,31 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
     {
     case L'1':
         change_screen(data->screens, SCREEN_REGIST_BOOK);
-        return;
+        break;
     case L'2':
         change_screen(data->screens, SCREEN_REMOVE_BOOK);
-        return;
+        break;
     case L'3':
         change_screen(data->screens, SCREEN_BORROW_BOOK);
-        return;
+        break;
     case L'4':
         change_screen(data->screens, SCREEN_RETURN_BOOK);
-        return;
+        break;
     case L'5':
         change_screen(data->screens, SCREEN_FIND_BOOK);
-        return;
+        break;
     case L'6':
         print_clients(data->clients);
         sleep(3);
-        return;
+        break;
     case L'7':
         change_screen(data->screens, SCREEN_INIT);
-        return;
+        break;
     case L'8':
         data->is_running = 0;
-        return;
+        break;
     default:
-        return;
+        break;
     }
 }
 
