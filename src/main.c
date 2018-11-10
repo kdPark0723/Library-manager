@@ -961,25 +961,33 @@ void destroy_borrows(LinkedList *borrow_list, const char const *file_name) {
 
 void destroy_client(Client const *client) {
     if (client!=NULL){
-	    free(client->password);
-	    free(client->name);
-	    free(client->address);
-	    free(client);
+            if (client->password != NULL)
+                free(client->password);
+	    if (client->name != NULL)
+                free(client->name);
+	    if (client->address != NULL)
+                free(client->address);
+            free(client);
     }
 }
 
 void destroy_book(Book const *book) {
     if (book!=NULL){
-        free(book->name);
-        free(book->publisher);
-        free(book->author);
-        free(book->location);
+        if (book->name != NULL)
+            free(book->name);
+        if (book->publisher != NULL)
+            free(book->publisher);
+        if (book->author != NULL)
+            free(book->author);
+        if (book->location
+            free(book->location);
         free(book);
     } 
 }
 void destroy_borrow(Borrow const *borrow) {
     if (borrow !=NULL){
-	    free(borrow->book_name);
+	    if (borrow->book_name != NULL)
+            free(borrow->book_name);
 	    free(borrow);
     }
 }
