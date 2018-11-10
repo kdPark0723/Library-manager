@@ -1044,15 +1044,20 @@ LinkedList *insert_book(LinkedList *book_list, Book *book)
 
     return book_list;
 }
-LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow) {
-    if (borrow_list == NULL || borrow == NULL)
+LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow) 
+{
+    if (borrow == NULL)
         return NULL;
+    LinkedList *node = malloc(sizeof(LinkedList));
+    node->contents = (void *)borrow;
+    
+    if (book_list == NULL)
+        return node;
     
     LinkedList *current = borrow_list;
     LinkedList *front = NULL;
-    LinkedList *node = malloc(sizeof(LinkedList));
-    node->contents = (void *)borrow;
-    while (current !=NULL){
+    while (current != NULL)
+    {
         front = current;
         current = current->next;
     }
