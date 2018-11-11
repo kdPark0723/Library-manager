@@ -755,7 +755,7 @@ LinkedList *init_clients(const char *file_name)
     LinkedList *fisrt_node = NULL;
     LinkedList *pre_node = NULL;
     Client *client = NULL;
-    wchar_t input[5][SIZE_INPUT_MAX];
+    wchar_t input[5][SIZE_INPUT_MAX] = { 0 };
 
     while (ftell(file_pointer) != EOF)
     {
@@ -764,7 +764,7 @@ LinkedList *init_clients(const char *file_name)
             fisrt_node = node;
         client = malloc(sizeof(Client));
 
-        fscanf(file_pointer, "%ls | %ls | %ls | %ls | %ls | ", input[0], input[1], input[2], input[3], input[4]);
+        wfscanf(file_pointer, L"%ls | %ls | %ls | %ls | %ls | ", input[0], input[1], input[2], input[3], input[4]);
 
         wcscpy(client->student_number, input[0]);
 
@@ -976,7 +976,7 @@ void save_books(const LinkedList *book_list, const char *file_name)
     {  
         fwprintf(file,
             L"%ls | %ls | %ls | %ls | %ls | %ls | %lc | ",
-            book->number, book->name, book->publisher, book->author, book->ISBN, book->location book->availability);
+            book->number, book->name, book->publisher, book->author, book->ISBN, book->location, book->availability);
 
         current_member = current_member->next;
         book = current_member->contents;
