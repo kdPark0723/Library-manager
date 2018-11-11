@@ -1031,12 +1031,12 @@ LinkedList *insert_client(LinkedList *client_list, Client *client)
     LinkedList *front_member = NULL;
 
     while (current_member != NULL)
-    {  
+    {
+        current_client = current_member->contents;
         if (wcscmp(current_client->student_number, client->student_number) < 0)
         {
             front_member = current_member;
             current_member = current_member->next;
-            current_client = current_member->contents;
         }
         else
         {
@@ -1071,12 +1071,12 @@ LinkedList *insert_book(LinkedList *book_list, Book *book)
     LinkedList *front_member = NULL;
 
     while (current_member != NULL)
-    {  
+    {
+        current_book = current_member->contents;
         if (wcscmp(current_book->ISBN, book->ISBN) < 0)
         {
             front_member = current_member;
             current_member = current_member->next;
-            current_book = current_member->contents;
         }
         else
         {
