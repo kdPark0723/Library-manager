@@ -1125,7 +1125,19 @@ Client *find_client_by_student_number(const LinkedList *client_list, const wchar
     }
     return 0;
 }
-LinkedList *find_books_by_name(const LinkedList *book_list, const wchar_t *book_name) { }
+LinkedList *find_books_by_name(const LinkedList *book_list, const wchar_t *book_name) 
+{
+    if (book_list == NULL || book_name == NULL)
+        return 0;
+    
+    LinkedList *result = NULL;
+    
+    for (const LinkedList *current = book_list; current != NULL; current = current->next)
+        if (wcscmp(((Book *)current->contents)->name, book_name) == 0)
+            result = insert_book(result, (Book *)current->contents);
+    
+    return result;
+}
 LinkedList *find_books_by_ISBN(const LinkedList *book_list, const wchar_t *book_ISBN)
 {
     if (book_list == NULL || book_ISBN == NULL)
@@ -1139,14 +1151,31 @@ LinkedList *find_books_by_ISBN(const LinkedList *book_list, const wchar_t *book_
     
     return result;
 }
-        
 LinkedList *find_books_by_author(const LinkedList *book_list, const wchar_t *book_author)
 {
-    return NULL;
+    if (book_list == NULL || book_author == NULL)
+        return 0;
+    
+    LinkedList *result = NULL;
+    
+    for (const LinkedList *current = book_list; current != NULL; current = current->next)
+        if (wcscmp(((Book *)current->contents)->author, book_author) == 0)
+            result = insert_book(result, (Book *)current->contents);
+    
+    return result;
 }
-LinkedList *find_books_by_publisher(const LinkedList *book_list, const wchar_t *book_publisher)
+LinkedList *find_books_by_publisher(const LinkedList *book_list, const wchar_t *book_publisher) 
 {
-    return NULL;
+    if (book_list == NULL || book_publisher == NULL)
+        return 0;
+    
+    LinkedList *result = NULL;
+    
+    for (const LinkedList *current = book_list; current != NULL; current = current->next)
+        if (wcscmp(((Book *)current->contents)->publisher, book_publisher) == 0)
+            result = insert_book(result, (Book *)current->contents);
+    
+    return result;
 }
 Book *find_book_by_number(const LinkedList *book_list, const wchar_t *book_number)
 {
