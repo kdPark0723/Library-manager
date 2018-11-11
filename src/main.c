@@ -753,7 +753,7 @@ LinkedList *init_clients(const char *file_name)
         return NULL;
 
     LinkedList *node = NULL;
-    LinkedList *fisrt_node = NULL;
+    LinkedList *first_node = NULL;
     LinkedList *pre_node = NULL;
     Client *client = NULL;
     wchar_t input[5][SIZE_INPUT_MAX] = { 0 };
@@ -764,8 +764,8 @@ LinkedList *init_clients(const char *file_name)
             break;
 
         node = malloc(sizeof(LinkedList));
-        if (fisrt_node == NULL)
-            fisrt_node = node;
+        if (first_node == NULL)
+            first_node = node;
         client = malloc(sizeof(Client));
 
         wcscpy(client->student_number, input[0]);
@@ -788,7 +788,7 @@ LinkedList *init_clients(const char *file_name)
     }
 
     fclose(file_pointer);
-    return fisrt_node;
+    return first_node;
 }
 LinkedList *init_books(const char *file_name) { }
 LinkedList *init_borrows(const char *file_name) { }
@@ -1133,7 +1133,7 @@ void destroy_list(LinkedList *list) { }
 
 void destroy_clients(LinkedList *client_list, const char *file_name)
 {
-    LinkedList * current = client_list;
+    LinkedList *current = client_list;
     save_clients(client_list, file_name);
     while (current != NULL)
     {
@@ -1142,11 +1142,10 @@ void destroy_clients(LinkedList *client_list, const char *file_name)
     }
     destroy_list(client_list);
 }
-
 void destroy_books(LinkedList *book_list, const char *file_name)
 {
-    LinkedList * current = book_list;
-    save_books(book_list,file_name);
+    LinkedList *current = book_list;
+    save_books(book_list, file_name);
     while (current != NULL)
     {
         destroy_book((Book *)current->contents);
@@ -1154,10 +1153,9 @@ void destroy_books(LinkedList *book_list, const char *file_name)
     }
     destroy_list(book_list);
 }
-
 void destroy_borrows(LinkedList *borrow_list, const char *file_name)
 {
-    LinkedList * current = borrow_list;
+    LinkedList *current = borrow_list;
     save_borrows(borrow_list, file_name);
     while (current != NULL)
     {
@@ -1180,7 +1178,6 @@ void destroy_client(Client *client)
         free(client);
     }
 }
-
 void destroy_book(Book *book)
 {
     if (book != NULL)
