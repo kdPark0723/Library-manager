@@ -760,13 +760,13 @@ LinkedList *init_clients(const char *file_name)
 
     while (ftell(file_pointer) != EOF)
     {
+        if (fwscanf(file_pointer, L"%ls | %ls | %ls | %ls | %ls | ", input[0], input[1], input[2], input[3], input[4]) == EOF)
+            break;
+
         node = malloc(sizeof(LinkedList));
         if (fisrt_node == NULL)
             fisrt_node = node;
         client = malloc(sizeof(Client));
-
-        if (fwscanf(file_pointer, L"%ls | %ls | %ls | %ls | %ls | ", input[0], input[1], input[2], input[3], input[4]) == EOF)
-            break;
 
         wcscpy(client->student_number, input[0]);
 
