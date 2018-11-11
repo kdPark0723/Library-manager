@@ -1594,6 +1594,8 @@ void input_find_book_screen(const wchar_t *input, Data *data)
     }
     wprintf(L">> 검색 결과 <<\n");
     print_books(current_books);
+    if (input[0] != L'5')
+        destroy_list(current_books);
     sleep(3);
 }
 
