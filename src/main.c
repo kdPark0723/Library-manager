@@ -1027,7 +1027,7 @@ LinkedList *insert_client(LinkedList *client_list, Client *client)
         return node;
 
     LinkedList *current_member = client_list;
-    Client *current_client = client_list->contents;
+    Client *current_client = NULL;
     LinkedList *front_member = NULL;
 
     while (current_member != NULL)
@@ -1067,7 +1067,7 @@ LinkedList *insert_book(LinkedList *book_list, Book *book)
         return node;
 
     LinkedList *current_member = book_list;
-    Book *current_book = book_list->contents;
+    Book *current_book = NULL;
     LinkedList *front_member = NULL;
 
     while (current_member != NULL)
@@ -1452,7 +1452,6 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
 
         data->is_admin = 1;
         data->login_client = client;
-        return; 
     } 
     if (client == NULL && !data->is_admin)
     {
