@@ -744,47 +744,50 @@ int main(void)
     return 0;
 }
 
-LinkedList *init_clients(const char *file_name) {
-    File *ifp;
-    ifp = fopen(file_name,"r+");
-    LinkedList * client_list=NULL;
-    while (ftell(ifp) != EOF)
-        client_list =init_client(ifp,client_list);
-    fclose(ifp);
-    return client_list;
-}
-LinkdeList * init_client (File * file_pointer,LinkedList client_list){
-    wchar_t input [5][20];
-    LinkedList * current = client_list;
-    LinkedList * front = NULL;
-    LinkedList * node =(LinkedList *)malloc(sizeof(LinkedList));
-    if (current !=NULL){
-        while (current != NULL){
-            front = current;
-            current = current ->next;
-        }
-        front->next=node;
-        node->next=NULL;
-    }
-    else{
-        client_list = node;
-        node ->next = NULL;
-    }
-    fscanf(file_pointer,"%ls | %ls | %ls | %ls | %ls | ",input [0],input [1],input [2],input [3],input [4]);
-    Client * client= (Client *)malloc(sizeof(Client));
-    wcscpy(client->student_number,input [0]);
-    client -> password = (wchar_t *)malloc(wcslen(input [1])+1);
-    wcscpy(client->password,input [1]);
-    client -> name = (wchar_t *)malloc(wcslen(input[2])+1);
-    wcscpy(client->name,input [2]);
-    client -> address = (wchar_t *)malloc(wcslen(input[3])+1);
-    wcscpy(client->address,input [3]);
-    wcscpy(client->phone_number ,input[4]);
-    node->contents = (void *)client;
-    return client_list;
-}    
+LinkedList *init_clients(const char *file_name)
+{
+    File *file_pointer;
+    file_pointer = fopen(file_name, "r+");
+    if (file_pointer == NULL)
+        return NULL;
 
-    
+    LinkedList *node = NULL;
+    LinkedList *fisrt_node = NULL;
+    LinkedList *pre_node = NULL;
+    Client *client = NULL;
+    wchar_t input[5][SIZE_INPUT_MAX];
+
+    while (ftell(file_pointer) != EOF)
+    {
+        node = malloc(sizeof(LinkedList));
+        if (fisrt_node == NULL)
+            fisrt_node = node;
+        client = malloc(sizeof(Client));
+
+        fscanf(file_pointer, "%ls | %ls | %ls | %ls | %ls | ", input[0], input[1], input[2], input[3], input[4]);
+
+        wcscpy(client->student_number, input[0]);
+
+        client -> password = malloc(sizeof(wchar_t) * (wcslen(input[1]) + 1));
+        wcscpy(client->password, input[1]);
+
+        client -> name = malloc(sizeof(wchar_t) * (wcslen(input[2]) + 1));
+        wcscpy(client->name, input[2]);
+
+        client -> address = malloc(sizeof(wchar_t) * (wcslen(input[3]) + 1));
+        wcscpy(client->address, input[3]);
+
+        wcscpy(client->phone_number, input[4]);
+
+        node->contents = (void *)client;
+        if (pre_node != NULL)
+            pre_node->next = node;
+        pre_node = node;
+    }
+
+    fclose(file_pointer);
+    return fisrt_node;
+}
 LinkedList *init_books(const char *file_name) { }
 LinkedList *init_borrows(const char *file_name) { }
 
