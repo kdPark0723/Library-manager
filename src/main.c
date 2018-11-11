@@ -330,19 +330,21 @@ Book *find_book_by_number(const LinkedList *book_list, const wchar_t *book_numbe
  *
  *   Find borrow list by client.
  *
+ *  @param borrow_list The borrow list to get borrow.
  *  @param client The client to get borrow.
  *  @return LinkedList* Fined Borrow list.
  */
-LinkedList *find_borrows_by_client(Client *client);
+LinkedList *find_borrows_by_client(const LinkedList *borrow_list, Client *client);
 /*  @brief Find borrow by client and book.
  *
  *  Find borrow by client and book.
  *
+ *  @param borrow_list The borrow list to get borrow.
  *  @param client The client to get borrow.
  *  @param book The book to get borrow.
  *  @return Borrow* Fined Borrow.
  */
-Borrow *find_borrow(Client *client, Book *book);
+Borrow *find_borrow(const LinkedList *borrow_list, Client *client, Book *book)
 
 /*  @brief remove client to client list.
  *
@@ -1129,7 +1131,7 @@ LinkedList *find_books_by_ISBN(const LinkedList *book_list, const wchar_t *book_
     LinkedList *current = book_list;
     LinkedList *result = NULL;
     
-    while (current !=NULL)
+    while (current != NULL)
         if (wcscmp(((Book *)current->contents)->ISBN, book_ISBN) == 0)
             result = insert_book(result, (Book *)current->contents);
     
@@ -1139,8 +1141,8 @@ LinkedList *find_books_by_ISBN(const LinkedList *book_list, const wchar_t *book_
 LinkedList *find_books_by_author(const LinkedList *book_list, const wchar_t *book_author) { }
 LinkedList *find_books_by_publisher(const LinkedList *book_list, const wchar_t *book_publisher) { }
 Book *find_book_by_number(const LinkedList *book_list, const wchar_t *book_number) { }
-LinkedList *find_borrows_by_client(Client *client) { }
-Borrow *find_borrow(Client *client, Book *book) { }
+LinkedList *find_borrows_by_client(const LinkedList *borrow_list, Client *client) { }
+Borrow *find_borrow(const LinkedList *borrow_list, Client *client, Book *book) { }
 
 LinkedList *remove_client(LinkedList *client_list, Client *client) { }
 LinkedList *remove_book(LinkedList *book_list, Book *book) { }
