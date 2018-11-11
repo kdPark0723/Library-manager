@@ -1128,10 +1128,9 @@ LinkedList *find_books_by_ISBN(const LinkedList *book_list, const wchar_t *book_
     if (book_list == NULL || book_ISBN == NULL)
         return 0;
     
-    LinkedList *current = book_list;
     LinkedList *result = NULL;
     
-    while (current != NULL)
+    for (LinkedList *current = book_list; current != NULL; current = current->next)
         if (wcscmp(((Book *)current->contents)->ISBN, book_ISBN) == 0)
             result = insert_book(result, (Book *)current->contents);
     
