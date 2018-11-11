@@ -1339,14 +1339,14 @@ void draw_init_screen(Data *data)
     wprintf(
         L">> 도서관 서비스 <<\n"
         L"1. 회원 가입           2. 로그인           3. 프로그램 종료\n"
+        L"\n"
         L"번호를 선택하세요: ");
 }
 void input_init_screen(const wchar_t *input, Data *data)
 {
     if (input == NULL || data == NULL)
         return;
-    if (data->is_admin)
-        data->is_admin = 0;
+    data->is_admin = 0;
     data->login_client = NULL;
 
     switch (input[0])
@@ -1455,7 +1455,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     } 
     if (client == NULL && !data->is_admin)
     {
-        wprintf(L"회원정보가 없습니다.");
+        wprintf(L"회원정보가 없습니다.\n");
         sleep(1);
         change_screen(data->screens, SCREEN_INIT);
 
@@ -1467,7 +1467,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
 
     if (data->is_admin)
     {
-        wprintf(L"로그인이 되셨습니다.");
+        wprintf(L"로그인이 되셨습니다.\n");
         sleep(1);
         change_screen(data->screens, SCREEN_MENU_ADMIN);
         return;
@@ -1475,13 +1475,13 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     if (wcscmp(client->password, input_tmp) == 0)
     {
         data->login_client = client;
-        wprintf(L"로그인이 되셨습니다.");
+        wprintf(L"로그인이 되셨습니다.\n");
         sleep(1);
         change_screen(data->screens, SCREEN_MENU_MEMBER);
     }
     else
     {
-        wprintf(L"잘못된 비밀번호입니다.");
+        wprintf(L"잘못된 비밀번호입니다.\n");
         sleep(1);
         change_screen(data->screens, SCREEN_INIT);
     }
@@ -1567,6 +1567,7 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
         change_screen(data->screens, SCREEN_FIND_BOOK);
         break;
     case L'6':
+        wprintf(L">> 내 회원 목록 <<\n");
         print_clients(data->clients);
         sleep(3);
         break;
