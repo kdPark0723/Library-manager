@@ -765,7 +765,8 @@ LinkedList *init_clients(const char *file_name)
             fisrt_node = node;
         client = malloc(sizeof(Client));
 
-        fwscanf(file_pointer, L"%ls | %ls | %ls | %ls | %ls | ", input[0], input[1], input[2], input[3], input[4]);
+        if (fwscanf(file_pointer, L"%ls | %ls | %ls | %ls | %ls | ", input[0], input[1], input[2], input[3], input[4]) == EOF)
+            break;
 
         wcscpy(client->student_number, input[0]);
 
