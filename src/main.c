@@ -1183,11 +1183,28 @@ Book *find_book_by_number(const LinkedList *book_list, const wchar_t *book_numbe
 }
 LinkedList *find_borrows_by_client(const LinkedList *borrow_list, Client *client)
 {
-    return NULL;
+    if (borrow_list == NULL || client == NULL)
+        return 0;
+    
+    LinkedList * result = NULL;
+    
+    for (const LinkedList *current = borrow_list; current != NULL; current = current->next)
+        if (wcscmp(((Borrow *)current->contents)->student_number, client->student_number) == 0)
+            result = insert_borrow(result, (Borrow *)current->contents);
+    
+    return result;
 }
 Borrow *find_borrow(const LinkedList *borrow_list, Client *client, Book *book)
 {
-    return NULL;
+    if (borrow_list==NULL || client == NULL || book == NULL)
+        return 0;
+    
+    for (const LinkedList *current = borrow_list; current != NULL; current = current -> next)
+        if (wcscmp(((Borrow *)current->contents)->student_number,client->student_number)==0)
+            if (wcscmp(((Borrow *)current->contetns)->book_number,book->number)==0)
+                
+                
+                
 }
 
 LinkedList *remove_client(LinkedList *client_list, Client *client)
