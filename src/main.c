@@ -1199,9 +1199,19 @@ Borrow *find_borrow(const LinkedList *borrow_list, Client *client, Book *book)
     if (borrow_list==NULL || client == NULL || book == NULL)
         return 0;
     
+    Borrow * borrow = NULL ;
+    
     for (const LinkedList *current = borrow_list; current != NULL; current = current -> next)
         if (wcscmp(((Borrow *)current->contents)->student_number,client->student_number)==0)
-            if (wcscmp(((Borrow *)current->contetns)->book_number,book->number)==0)
+            if (wcscmp(((Borrow *)current->contents)->book_number,book->number)==0){
+                borrow = (Borrow *)current->contents;
+                break;
+            }
+    if (borrow == NULL)
+        return 0;//결과 없음
+    
+    return borrow;
+                
                 
                 
                 
