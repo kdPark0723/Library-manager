@@ -1201,20 +1201,16 @@ Borrow *find_borrow(const LinkedList *borrow_list, Client *client, Book *book)
     
     Borrow * borrow = NULL ;
     
-    for (const LinkedList *current = borrow_list; current != NULL; current = current -> next)
-        if (wcscmp(((Borrow *)current->contents)->student_number,client->student_number)==0)
-            if (wcscmp(((Borrow *)current->contents)->book_number,book->number)==0){
-                borrow = (Borrow *)current->contents;
-                break;
-            }
+    for (const LinkedList *current = borrow_list; current != NULL; current = current->next)
+        if (wcscmp(((Borrow *)current->contents)->student_number, client->student_number) == 0 && wcscmp(((Borrow *)current->contents)->book_number, book->number)==0)
+        {
+            borrow = (Borrow *)current->contents;
+            break;
+        }
     if (borrow == NULL)
-        return 0;//결과 없음
+        return NULL;//결과 없음
     
-    return borrow;
-                
-                
-                
-                
+    return borrow;      
 }
 
 LinkedList *remove_client(LinkedList *client_list, Client *client)
@@ -1352,7 +1348,7 @@ Screens *init_screens(void)
     screens->screens[SCREEN_MODIFY_CLIENT].type = SCREEN_MODIFY_CLIENT;
     screens->screens[SCREEN_MODIFY_CLIENT].draw = draw_modify_client_screen;
     screens->screens[SCREEN_MODIFY_CLIENT].input = input_modify_client_screen;
-    
+
     return screens;
 }
 void change_screen(Screens *screens, char type)
