@@ -11,7 +11,7 @@
  *
  *  If you want to get new input, you should make screen.
  *  If you not want to get new input, you shouldn't make screen.
- * 
+ *
  *  If you want add new screen, try following steps.
  *  1. Add new define for new screen.
  *  2. Change other define, all define should have another number.
@@ -743,7 +743,7 @@ int main(void)
     destroy_borrows(data.borrows, STRING_BORROW_FILE);
 
     destroy_screens(data.screens);
-    
+
 
     return 0;
 }
@@ -842,7 +842,7 @@ Borrow *create_borrow(Client *client, Book *book)
 
     wcscpy(borrow_p->student_number, client->student_number);
     wcscpy(borrow_p->book_number, book->number);
-    
+
     if ((t->tm_wday + 30) / 7 == 0) //(t->tm_wday+30)/7==30일 뒤의 요일
         borrow_p->return_date = borrow_p->loan_date + 31 * 24 * 60 * 60;
     else
@@ -974,12 +974,12 @@ void save_books(const LinkedList *book_list, const char *file_name)
     file = fopen(file_name, "w+");
     if (file == NULL)
         return;
-    
+
     const LinkedList *current_member = book_list;
     Book *book = current_member->contents;
-    
+
     while (current_member != NULL)
-    {  
+    {
         fwprintf(file,
             L"%ls | %ls | %ls | %ls | %ls | %ls | %lc | ",
             book->number, book->name, book->publisher, book->author, book->ISBN, book->location, book->availability);
@@ -998,12 +998,12 @@ void save_borrows(const LinkedList *borrow_list, const char *file_name)
     file = fopen(file_name, "w+");
     if (file == NULL)
         return;
-    
+
     const LinkedList *current_member = borrow_list;
     Borrow *borrow = current_member->contents;
-    
+
     while (current_member != NULL)
-    {  
+    {
         fwprintf(file,
             L"%ls | %ls | %lld | %lld | ",
             borrow->book_name, borrow->book_number, (long long)(borrow->loan_date), (long long)(borrow->return_date));
@@ -1022,7 +1022,7 @@ LinkedList *insert_client(LinkedList *client_list, Client *client)
     LinkedList *node = malloc(sizeof(LinkedList));
     node->contents = (void *)client;
     node->next = NULL;
-    
+
     if (client_list == NULL)
         return node;
 
@@ -1046,7 +1046,7 @@ LinkedList *insert_client(LinkedList *client_list, Client *client)
                 front_member->next = node;
                 client_list = node;
             }
-            
+
             break;
         }
     }
@@ -1062,7 +1062,7 @@ LinkedList *insert_book(LinkedList *book_list, Book *book)
     LinkedList *node = malloc(sizeof(LinkedList));
     node->contents = (void *)book;
     node->next = NULL;
-    
+
     if (book_list == NULL)
         return node;
 
@@ -1086,7 +1086,7 @@ LinkedList *insert_book(LinkedList *book_list, Book *book)
                 front_member->next = node;
                 book_list = node;
             }
-            
+
             break;
         }
     }
@@ -1095,7 +1095,7 @@ LinkedList *insert_book(LinkedList *book_list, Book *book)
 
     return book_list;
 }
-LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow) 
+LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow)
 {
     if (borrow == NULL)
         return NULL;
@@ -1110,14 +1110,14 @@ Client *find_client_by_student_number(const LinkedList *client_list, const wchar
 {
     if (client_list == NULL || student_number == NULL)
         return 0;
-       
+
     const LinkedList * current = client_list;
     Client * client;
     while (current != NULL)
     {
         if (wcscmp(((Client *)current->contents)->student_number, student_number) != 0)
             current = current->next;
-        else 
+        else
         {
             client = ((Client *)current->contents);
             return client;
@@ -1125,56 +1125,56 @@ Client *find_client_by_student_number(const LinkedList *client_list, const wchar
     }
     return 0;
 }
-LinkedList *find_books_by_name(const LinkedList *book_list, const wchar_t *book_name) 
+LinkedList *find_books_by_name(const LinkedList *book_list, const wchar_t *book_name)
 {
     if (book_list == NULL || book_name == NULL)
         return 0;
-    
+
     LinkedList *result = NULL;
-    
+
     for (const LinkedList *current = book_list; current != NULL; current = current->next)
         if (wcscmp(((Book *)current->contents)->name, book_name) == 0)
             result = insert_book(result, (Book *)current->contents);
-    
+
     return result;
 }
 LinkedList *find_books_by_ISBN(const LinkedList *book_list, const wchar_t *book_ISBN)
 {
     if (book_list == NULL || book_ISBN == NULL)
         return 0;
-    
+
     LinkedList *result = NULL;
-    
+
     for (const LinkedList *current = book_list; current != NULL; current = current->next)
         if (wcscmp(((Book *)current->contents)->ISBN, book_ISBN) == 0)
             result = insert_book(result, (Book *)current->contents);
-    
+
     return result;
 }
 LinkedList *find_books_by_author(const LinkedList *book_list, const wchar_t *book_author)
 {
     if (book_list == NULL || book_author == NULL)
         return 0;
-    
+
     LinkedList *result = NULL;
-    
+
     for (const LinkedList *current = book_list; current != NULL; current = current->next)
         if (wcscmp(((Book *)current->contents)->author, book_author) == 0)
             result = insert_book(result, (Book *)current->contents);
-    
+
     return result;
 }
-LinkedList *find_books_by_publisher(const LinkedList *book_list, const wchar_t *book_publisher) 
+LinkedList *find_books_by_publisher(const LinkedList *book_list, const wchar_t *book_publisher)
 {
     if (book_list == NULL || book_publisher == NULL)
         return 0;
-    
+
     LinkedList *result = NULL;
-    
+
     for (const LinkedList *current = book_list; current != NULL; current = current->next)
         if (wcscmp(((Book *)current->contents)->publisher, book_publisher) == 0)
             result = insert_book(result, (Book *)current->contents);
-    
+
     return result;
 }
 Book *find_book_by_number(const LinkedList *book_list, const wchar_t *book_number)
@@ -1236,7 +1236,7 @@ void destroy_borrows(LinkedList *borrow_list, const char *file_name)
         destroy_borrow((Borrow *)current->contents);
         current = current ->next;
     }
-    destroy_list(borrow_list); 
+    destroy_list(borrow_list);
 }
 
 void destroy_client(Client *client)
@@ -1265,7 +1265,7 @@ void destroy_book(Book *book)
         if (book->location != NULL)
             free(book->location);
         free(book);
-    } 
+    }
 }
 void destroy_borrow(Borrow *borrow)
 {
@@ -1293,11 +1293,11 @@ Screens *init_screens(void)
     screens->screens[SCREEN_MENU_MEMBER].type = SCREEN_MENU_MEMBER;
     screens->screens[SCREEN_MENU_MEMBER].draw = draw_menu_member_screen;
     screens->screens[SCREEN_MENU_MEMBER].input = input_menu_member_screen;
-    
+
     screens->screens[SCREEN_SIGN_IN].type = SCREEN_SIGN_IN;
     screens->screens[SCREEN_SIGN_IN].draw = draw_sign_in_screen;
     screens->screens[SCREEN_SIGN_IN].input = input_sign_in_screen;
-    
+
     screens->screens[SCREEN_SIGN_UP].type = SCREEN_SIGN_UP;
     screens->screens[SCREEN_SIGN_UP].draw = draw_sign_up_screen;
     screens->screens[SCREEN_SIGN_UP].input = input_sign_up_screen;
@@ -1306,6 +1306,26 @@ Screens *init_screens(void)
     screens->screens[SCREEN_FIND_BOOK].draw = draw_find_book_screen;
     screens->screens[SCREEN_FIND_BOOK].input = input_find_book_screen;
 
+    screens->screens[SCREEN_REGIST_BOOK].type = SCREEN_REGIST_BOOK;
+    screens->screens[SCREEN_REGIST_BOOK].draw = draw_regist_book_screen;
+    screens->screens[SCREEN_REGIST_BOOK].input = input_regist_book_screen;
+
+    screens->screens[SCREEN_REMOVE_BOOK].type = SCREEN_REMOVE_BOOK;
+    screens->screens[SCREEN_REMOVE_BOOK].draw = draw_remove_book_screen;
+    screens->screens[SCREEN_REMOVE_BOOK].input = input_remove_book_screen;
+
+    screens->screens[SCREEN_BORROW_BOOK].type = SCREEN_BORROW_BOOK;
+    screens->screens[SCREEN_BORROW_BOOK].draw = draw_borrow_book_screen;
+    screens->screens[SCREEN_BORROW_BOOK].input = input_borrow_book_screen;
+
+    screens->screens[SCREEN_RETURN_BOOK].type = SCREEN_RETURN_BOOK;
+    screens->screens[SCREEN_RETURN_BOOK].draw = draw_return_book_screen;
+    screens->screens[SCREEN_RETURN_BOOK].input = input_return_book_screen;
+
+    screens->screens[SCREEN_MODIFY_CLIENT].type = SCREEN_MODIFY_CLIENT;
+    screens->screens[SCREEN_MODIFY_CLIENT].draw = draw_modify_client_screen;
+    screens->screens[SCREEN_MODIFY_CLIENT].input = input_modify_client_screen;
+    
     return screens;
 }
 void change_screen(Screens *screens, char type)
@@ -1334,7 +1354,7 @@ void destroy_screens(Screens *screens)
         free(screens);
 }
 
-void draw_init_screen(Data *data) 
+void draw_init_screen(Data *data)
 {
     wprintf(
         L">> 도서관 서비스 <<\n"
@@ -1452,7 +1472,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
 
         data->is_admin = 1;
         data->login_client = client;
-    } 
+    }
     if (client == NULL && !data->is_admin)
     {
         wprintf(L"회원정보가 없습니다.\n");
