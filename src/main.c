@@ -1883,8 +1883,6 @@ void input_regist_book_screen(const wchar_t *input, Data *data)
     change_screen(data->screens, data->screens->pre_screen_type);
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 void draw_remove_book_screen(Data *data)
 {
     wprintf(
@@ -1900,21 +1898,6 @@ void input_remove_book_screen(const wchar_t *input, Data *data)
 
     wchar_t find_data[SIZE_INPUT_MAX] = {0};
     LinkedList *current_books = NULL;
-=======
-=======
->>>>>>> cb467b7528d70929ed72fe82aa431bce104ebb08
-void draw_remove_book_screen(Data *data) 
-{
-    wprintf("도서가 삭제되었습니다.");
-}
-void input_remove_book_screen(const wchar_t *input, Data *data) 
-{
-    data->books = remove_book(data->books);
-    save_books(data->books, STRING_BOOK_FILE);
-    change_screen(data->screens, SCREEN_INIT);
-}
-<<<<<<< HEAD
->>>>>>> cb467b7528d70929ed72fe82aa431bce104ebb08
 
     switch (input[0])
     {
