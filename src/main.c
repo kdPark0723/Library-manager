@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+#include <stdbool.h>d
 #include <string.h>
 #include <wchar.h>
 #include <time.h>
@@ -1764,8 +1764,16 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
 void draw_regist_book_screen(Data *data) {}
 void input_regist_book_screen(const wchar_t *input, Data *data) {}
 
-void draw_remove_book_screen(Data *data) {}
-void input_remove_book_screen(const wchar_t *input, Data *data) {}
+void draw_remove_book_screen(Data *data) 
+{
+    wprintf("도서가 삭제되었습니다.");
+}
+void input_remove_book_screen(const wchar_t *input, Data *data) 
+{
+    data->books = remove_book(data->books);
+    save_books(data->books, STRING_BOOK_FILE);
+    change_screen(data->screens, SCREEN_INIT);
+}
 
 void draw_borrow_book_screen(Data *data) {}
 void input_borrow_book_screen(const wchar_t *input, Data *data) {}
