@@ -1347,15 +1347,66 @@ Borrow *find_borrow(const LinkedList *borrow_list, Client *client, Book *book)
 
 LinkedList *remove_client(LinkedList *client_list, Client *client)
 {
-    return NULL;
+    LinkedList first_node = client_list;
+    LinkedList pre_node = NULL;
+    while (client_list != NULL)
+    {
+        if (client_list->contents == client)
+        {
+            if (pre_node != NULL)
+                pre_node->next = client_list->next;
+            else
+                first_node = client_list->next;
+            destroy_client(client);
+            free(client_list);
+            break;
+        }
+        pre_node = client_list;
+        client_list = client_list->next;
+    }
+    return first_node;
 }
 LinkedList *remove_book(LinkedList *book_list, Book *book)
 {
-    return NULL;
+    LinkedList first_node = book_list;
+    LinkedList pre_node = NULL;
+    while (book_list != NULL)
+    {
+        if (book_list->contents == book)
+        {
+            if (pre_node != NULL)
+                pre_node->next = book_list->next;
+            else
+                first_node = book_list->next;
+            destroy_book(book);
+            free(book_list);
+            break;
+        }
+        pre_node = book_list;
+        book_list = book_list->next;
+    }
+    return first_node;
 }
 LinkedList *remove_borrow(LinkedList *borrow_list, Borrow *borrow)
 {
-    return NULL;
+    LinkedList first_node = client_list;
+    LinkedList pre_node = NULL;
+    while (borrow_list != NULL)
+    {
+        if (borrow_list->contents == borrow)
+        {
+            if (pre_node != NULL)
+                pre_node->next = borrow_list->next;
+            else
+                first_node = borrow_list->next;
+            destroy_borrow(borrow);
+            free(borrow_list);
+            break;
+        }
+        pre_node = borrow_list;
+        borrow_list = borrow_list->next;
+    }
+    return first_node;
 }
 
 void destroy_list(LinkedList *list)
