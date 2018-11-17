@@ -992,14 +992,13 @@ void save_clients(const LinkedList const *client_list, const char const *file_na
     {
         client = current_member->contents;
         fwprintf(file,
-            L"%ls | %ls | %ls | %ls | %ls |",
+            L"%ls | %ls | %ls | %ls | %ls | ",
             client->student_number, client->password, client->name, client->address, client->phone_number);
 
         current_member = current_member->next;
     }
     fclose(file);
 }
-
 void save_books(const LinkedList *book_list, const char *file_name)
 {
     if (book_list == NULL)
