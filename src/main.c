@@ -856,11 +856,12 @@ Borrow *create_borrow(Client *client, Book *book)
 
 void print_client(const Client *client) 
 {
-     wprintf(
+    wprintf(
         L"학번 : %ls \n"
         L"이름 : %ls \n"
+        L"전화번호 : %ls \n"
         L"주소 : %ls \n",
-        client->student_number, client->name, client->address);
+        client->student_number, client->name, client->phone_number, client->address);
 }
 void print_book(const Book *book)
 {
@@ -1254,7 +1255,16 @@ LinkedList *remove_borrow(LinkedList *borrow_list, Borrow *borrow)
     return NULL;
 }
 
-void destroy_list(LinkedList *list) { }
+void destroy_list(LinkedList *list)
+{
+    LinkedList before_node = NULL;
+    while (list != NULL)
+    {
+        before_node = list;
+        list = list->next;
+        free(before_node);
+    }
+}
 
 void destroy_clients(LinkedList *client_list, const char *file_name)
 {
