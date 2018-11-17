@@ -1347,8 +1347,8 @@ Borrow *find_borrow(const LinkedList *borrow_list, Client *client, Book *book)
 
 LinkedList *remove_client(LinkedList *client_list, Client *client)
 {
-    LinkedList first_node = client_list;
-    LinkedList pre_node = NULL;
+    LinkedList *first_node = client_list;
+    LinkedList *pre_node = NULL;
     while (client_list != NULL)
     {
         if (client_list->contents == client)
@@ -1368,8 +1368,8 @@ LinkedList *remove_client(LinkedList *client_list, Client *client)
 }
 LinkedList *remove_book(LinkedList *book_list, Book *book)
 {
-    LinkedList first_node = book_list;
-    LinkedList pre_node = NULL;
+    LinkedList *first_node = book_list;
+    LinkedList *pre_node = NULL;
     while (book_list != NULL)
     {
         if (book_list->contents == book)
@@ -1389,8 +1389,8 @@ LinkedList *remove_book(LinkedList *book_list, Book *book)
 }
 LinkedList *remove_borrow(LinkedList *borrow_list, Borrow *borrow)
 {
-    LinkedList first_node = client_list;
-    LinkedList pre_node = NULL;
+    LinkedList *first_node = borrow_list;
+    LinkedList *pre_node = NULL;
     while (borrow_list != NULL)
     {
         if (borrow_list->contents == borrow)
@@ -1615,7 +1615,7 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     if (find_client_by_student_number(data->clients, input) != NULL)
     {
         wprintf(L"이미 존재하는 학번입니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_INIT);
         return;
     }
@@ -1655,7 +1655,7 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     data->clients = insert_client(data->clients, client);
     save_clients(data->clients, STRING_CLIENT_FILE);
     wprintf(L"회원가입이 되셨습니다.\n");
-    sleep(3);
+    sleep(1);
     change_screen(data->screens, SCREEN_INIT);
 }
 
@@ -1691,7 +1691,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     if (client == NULL && !data->is_admin)
     {
         wprintf(L"회원정보가 없습니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_INIT);
 
         return;
@@ -1703,7 +1703,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     if (data->is_admin)
     {
         wprintf(L"로그인이 되셨습니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_MENU_ADMIN);
         return;
     }
@@ -1711,13 +1711,13 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     {
         data->login_client = client;
         wprintf(L"로그인이 되셨습니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_MENU_MEMBER);
     }
     else
     {
         wprintf(L"잘못된 비밀번호입니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_INIT);
     }
 }
@@ -1804,7 +1804,7 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
     case L'6':
         wprintf(L">> 내 회원 목록 <<\n");
         print_clients(data->clients);
-        sleep(3);
+        sleep(5);
         break;
     case L'7':
         change_screen(data->screens, SCREEN_INIT);
@@ -1927,7 +1927,7 @@ void input_find_book_screen(const wchar_t *input, Data *data)
     print_books(current_books);
     if (current_books != data->books)
         destroy_list(current_books);
-    sleep(3);
+    sleep(5);
 }
 
 void draw_modify_client_screen(Data *data)
