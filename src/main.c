@@ -2067,11 +2067,35 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
 
 void draw_return_book_screen(Data *data)
 {
-
+    wprintf(L"학번을 입력하세요: ");
 }
 void input_return_book_screen(const wchar_t *input, Data *data)
 {
+    Client *student = find_client_by_student_number(data->clients, input);
+    LinkedList *borrows = find_borrows_by_client(data->borrows, student);
+    wchar_t input_tmp[SIZE_BOOK_NUMBER+1] = {0};
 
+    wprintf(L"\n>> 회원의 대여 목록 <<\n");
+    print_borrows(borrows);
+    wprintf(L"\n반납할 도서번호를 입력하세요: ");
+    wscanf(L"%s", input_tmp);
+
+    Book *book = find_book_by_number(data->books, input_tmp);
+
+    wprintf(L"도서 반납처리를 할까요? ");
+    wscanf(L"%s", input_tmp);
+
+    if (input_tmp[0] == L'Y' || input_tmp[0] == L'y')
+    {
+        book->availability = L'Y';
+        save_books(data->books, STRING_BOOK_FILE);
+        data->borrows = remove_borrow(data->borrows, find_borrow(data->borrows, student, book));
+    }
+    else
+        wprintf(L"취소하였습니다.\n");
+
+    sleep(1);
+    change_screen(data->screens, data->screens->pre_screen_type);
 }
 
 void draw_find_book_screen(Data *data)
