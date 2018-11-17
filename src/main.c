@@ -945,7 +945,7 @@ void print_clients(const LinkedList *client_list)
     const LinkedList *current = client_list;
     while (current !=NULL)
     {
-        print_client (current->contents);
+        print_client(current->contents);
         current =current->next;
     }
     return;
@@ -1076,7 +1076,6 @@ LinkedList *insert_client(LinkedList *client_list, Client *client)
                 front_member->next = node;
                 client_list = node;
             }
-
             break;
         }
     }
@@ -1116,7 +1115,6 @@ LinkedList *insert_book(LinkedList *book_list, Book *book)
                 front_member->next = node;
                 book_list = node;
             }
-
             break;
         }
     }
