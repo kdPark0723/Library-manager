@@ -2094,8 +2094,6 @@ void input_return_book_screen(const wchar_t *input, Data *data)
     else
         wprintf(L"취소하였습니다.\n");
 
-    if (current_books != data->books)
-        destroy_list(current_books);
     sleep(1);
     change_screen(data->screens, data->screens->pre_screen_type);
 }
