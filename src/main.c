@@ -933,6 +933,8 @@ void print_borrow(const Borrow *borrow)
     }
 }
 
+
+
 void print_clients(const LinkedList *client_list)
 {
     const LinkedList *current = client_list;
@@ -964,7 +966,32 @@ void print_borrows(const LinkedList *borrow_list)
     return ;
 }
 
-void save_clients(const LinkedList *client_list, const char *file_name) { }
+Client save_clients(const LinkedList const *client_list, const char const *file_name) {
+		if (client_list == NULL)
+			return;
+
+		FILE *file = NULL;
+		file = fopen(file_name, "w+");
+		if (file == NULL)
+			return;
+
+		const LinkedList *current_member = client_list;
+		Client *client = current_member->contents;
+
+		while (current_member != NULL)
+		{
+			fwprintf(file,
+				L"%ls | %ls | %ls | %ls | %ls |",
+				client->student_number, client->password, client->name, client->address, client->phone_number);
+
+			current_member = current_member->next;
+			client = current_member->contents;
+		}
+		fclose(file);
+	
+	
+}
+
 void save_books(const LinkedList *book_list, const char *file_name)
 {
     if (book_list == NULL)
