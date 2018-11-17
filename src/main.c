@@ -1311,7 +1311,25 @@ LinkedList *find_books_by_publisher(const LinkedList *book_list, const wchar_t *
 }
 Book *find_book_by_number(const LinkedList *book_list, const wchar_t *book_number)
 {
-    return NULL;
+    if (book_list == NULL || book_number == NULL)
+        return NULL;
+
+    Book *result = NULL;
+    int num1, num2;
+    for (const LinkedList *current = book_list; current != NULL; current = current->next)
+    {
+        result = current->contents;
+        swscanf(result->number, L"%8d", &num1);
+        swscanf(book_number, L"%d", &num2);
+        if (num1 == num2)
+            break;
+        if (current->next == NULL)
+        {
+            result = NULL;
+            break;
+        }
+    }
+    return result;
 }
 LinkedList *find_borrows_by_client(const LinkedList *borrow_list, Client *client)
 {
@@ -1746,7 +1764,7 @@ void input_menu_member_screen(const wchar_t *input, Data *data)
         clear_screen();
         wprintf(L">> 내 대여 목록 <<\n");
         print_borrows(find_borrows_by_client(data->borrows, data->login_client));
-        sleep(3);
+        sleep(5);
         break;
     case L'3':
         change_screen(data->screens, SCREEN_MODIFY_CLIENT);
@@ -1865,14 +1883,105 @@ void input_regist_book_screen(const wchar_t *input, Data *data)
     change_screen(data->screens, data->screens->pre_screen_type);
 }
 
-void draw_remove_book_screen(Data *data) {}
-void input_remove_book_screen(const wchar_t *input, Data *data) {}
+void draw_remove_book_screen(Data *data)
+{
+    wprintf(
+        L">> 도서 삭제 <<\n"
+        L"1. 도서명 검색    2. ISBN 검색\n"
+        L"\n"
+        L"검색 번호를 입력하세요: ");
+}
+void input_remove_book_screen(const wchar_t *input, Data *data)
+{
+    if (input == NULL || data == NULL)
+        return;
 
-void draw_borrow_book_screen(Data *data) {}
-void input_borrow_book_screen(const wchar_t *input, Data *data) {}
+    wchar_t find_data[SIZE_INPUT_MAX] = {0};
+    LinkedList *current_books = NULL;
 
-void draw_return_book_screen(Data *data) {}
-void input_return_book_screen(const wchar_t *input, Data *data) {}
+    switch (input[0])
+    {
+    case L'1':
+        wprintf(L"도서명을 입력하세요: ");
+        wscanf(L"%ls", find_data);
+        current_books = find_books_by_name(data->books, find_data);
+        break;
+    case L'2':
+        wprintf(L"ISBN을 입력하세요: ");
+        wscanf(L"%ls", find_data);
+        current_books = find_books_by_ISBN(data->books, find_data);
+        break;
+    default:
+        return;
+    }
+
+    wprintf(L">> 검색 결과 <<\n");
+    if (current_books == NULL)
+    {
+        wprintf(L"검색결과가 없습니다.\n");
+        sleep(1);
+        change_screen(data->screens, data->screens->pre_screen_type);
+        return;
+    }
+
+    const LinkedList *current = current_books;
+    wchar_t book_num[SIZE_BOOK_NUMBER+1] = {0};
+    wprintf(L"도서번호: ");
+    while (current != NULL)
+    {
+        wprintf(L"%ls(삭제 가능 여부 : %lc) ", ((Book *)current->contents)->number, ((Book *)current->contents)->availability);
+        current = current->next;
+    }
+    wprintf(
+        L"\n"
+        L"도서명 : %ls \n"
+        L"출판사 : %ls \n"
+        L"저자명 : %ls \n"
+        L"ISBN : %ls \n"
+        L"소장처 : %ls \n"
+        L"\n"
+        L"삭제할 도서의 번호를 입력하세요: ",
+        ((Book *)current_books->contents)->name, ((Book *)current_books->contents)->publisher, ((Book *)current_books->contents)->author, ((Book *)current_books->contents)->ISBN, ((Book *)current_books->contents)->location);
+    wscanf(L"%s", book_num);
+    Book *book = find_book_by_number(current_books, book_num);
+    if (book == NULL)
+    {
+        wprintf(L"검색결과가 없습니다.\n");
+        sleep(1);
+        change_screen(data->screens, data->screens->pre_screen_type);
+        return;
+    }
+    if (book->availability == L'Y')
+    {
+        remove_book(data->books, book);
+        wprintf(L"삭제되었습니다.\n");
+    }
+    else
+        wprintf(L"이 도서는 삭제할 수 없습니다.\n");
+        
+    if (current_books != data->books)
+        destroy_list(current_books);
+    sleep(5);
+    change_screen(data->screens, data->screens->pre_screen_type);
+}
+
+void draw_borrow_book_screen(Data *data)
+{
+
+}
+void input_borrow_book_screen(const wchar_t *input, Data *data)
+{
+
+}
+
+void draw_return_book_screen(Data *data)
+{
+
+}
+void input_return_book_screen(const wchar_t *input, Data *data)
+{
+
+}
 
 void draw_find_book_screen(Data *data)
 {
