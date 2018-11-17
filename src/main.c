@@ -912,18 +912,23 @@ Book *create_book(const LinkedList *book_list, const wchar_t *name, const wchar_
     wcscpy(book_p->ISBN, ISBN);
     book_p->availability = L'Y';
 
-    LinkedList *current = book_list->next; //여기서부터는 가장 최근의(큰) 도서번호를 구하는 과정임
-    LinkedList *largest = current;
+    const LinkedList *current = book_list; //여기서부터는 가장 최근의(큰) 도서번호를 구하는 과정임
+    const LinkedList *largest = current;
 
     while (current != NULL)
     {
+        current = current->next;
+        if (current == NULL)
+            break;
         if (wcscmp(((Book *)current->contents)->number, ((Book *)largest->contents)->number) > 0)
             largest = current;
-        current = current->next;
     }
 
     int largest_num;
-    swscanf(((Book *)(largest->contents))->number, L"%d", &largest_num);
+    if (book_list == NULL)
+        largest_num = 0;
+    else
+        swscanf(((Book *)(largest->contents))->number, L"%d", &largest_num);
     swprintf(book_p->number, SIZE_BOOK_NUMBER + 1, L"%07d", largest_num + 1);
 
     return book_p;
@@ -1342,15 +1347,66 @@ Borrow *find_borrow(const LinkedList *borrow_list, Client *client, Book *book)
 
 LinkedList *remove_client(LinkedList *client_list, Client *client)
 {
-    return NULL;
+    LinkedList *first_node = client_list;
+    LinkedList *pre_node = NULL;
+    while (client_list != NULL)
+    {
+        if (client_list->contents == client)
+        {
+            if (pre_node != NULL)
+                pre_node->next = client_list->next;
+            else
+                first_node = client_list->next;
+            destroy_client(client);
+            free(client_list);
+            break;
+        }
+        pre_node = client_list;
+        client_list = client_list->next;
+    }
+    return first_node;
 }
 LinkedList *remove_book(LinkedList *book_list, Book *book)
 {
-    return NULL;
+    LinkedList *first_node = book_list;
+    LinkedList *pre_node = NULL;
+    while (book_list != NULL)
+    {
+        if (book_list->contents == book)
+        {
+            if (pre_node != NULL)
+                pre_node->next = book_list->next;
+            else
+                first_node = book_list->next;
+            destroy_book(book);
+            free(book_list);
+            break;
+        }
+        pre_node = book_list;
+        book_list = book_list->next;
+    }
+    return first_node;
 }
 LinkedList *remove_borrow(LinkedList *borrow_list, Borrow *borrow)
 {
-    return NULL;
+    LinkedList *first_node = borrow_list;
+    LinkedList *pre_node = NULL;
+    while (borrow_list != NULL)
+    {
+        if (borrow_list->contents == borrow)
+        {
+            if (pre_node != NULL)
+                pre_node->next = borrow_list->next;
+            else
+                first_node = borrow_list->next;
+            destroy_borrow(borrow);
+            free(borrow_list);
+            break;
+        }
+        pre_node = borrow_list;
+        borrow_list = borrow_list->next;
+    }
+    return first_node;
 }
 
 void destroy_list(LinkedList *list)
@@ -1559,7 +1615,7 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     if (find_client_by_student_number(data->clients, input) != NULL)
     {
         wprintf(L"이미 존재하는 학번입니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_INIT);
         return;
     }
@@ -1599,7 +1655,7 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     data->clients = insert_client(data->clients, client);
     save_clients(data->clients, STRING_CLIENT_FILE);
     wprintf(L"회원가입이 되셨습니다.\n");
-    sleep(3);
+    sleep(1);
     change_screen(data->screens, SCREEN_INIT);
 }
 
@@ -1635,7 +1691,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     if (client == NULL && !data->is_admin)
     {
         wprintf(L"회원정보가 없습니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_INIT);
 
         return;
@@ -1647,7 +1703,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     if (data->is_admin)
     {
         wprintf(L"로그인이 되셨습니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_MENU_ADMIN);
         return;
     }
@@ -1655,13 +1711,13 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     {
         data->login_client = client;
         wprintf(L"로그인이 되셨습니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_MENU_MEMBER);
     }
     else
     {
         wprintf(L"잘못된 비밀번호입니다.\n");
-        sleep(3);
+        sleep(1);
         change_screen(data->screens, SCREEN_INIT);
     }
 }
@@ -1748,7 +1804,7 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
     case L'6':
         wprintf(L">> 내 회원 목록 <<\n");
         print_clients(data->clients);
-        sleep(3);
+        sleep(5);
         break;
     case L'7':
         change_screen(data->screens, SCREEN_INIT);
@@ -1761,8 +1817,53 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
     }
 }
 
-void draw_regist_book_screen(Data *data) {}
-void input_regist_book_screen(const wchar_t *input, Data *data) {}
+void draw_regist_book_screen(Data *data)
+{
+    wprintf(
+        L">> 도서 등록 <<\n"
+        L"도서명: ");
+}
+void input_regist_book_screen(const wchar_t *input, Data *data)
+{
+    if (input == NULL || data == NULL)
+        return;
+
+    wchar_t input_tmp[4][SIZE_INPUT_MAX] = {0};
+    Book *book;
+
+    wprintf(L"출판사: ");
+    wscanf(L"%ls", input_tmp[0]);
+    wprintf(L"저자명: ");
+    wscanf(L"%ls", input_tmp[1]);
+    wprintf(L"ISBN: ");
+    wscanf(L"%ls", input_tmp[2]);
+    wprintf(L"소장처: ");
+    wscanf(L"%ls", input_tmp[3]);
+
+    book =  create_book(data->books, input, input_tmp[0], input_tmp[1], input_tmp[2], input_tmp[3]);
+
+    wprintf(
+        L"\n"
+        L"자동입력 사항\n"
+        L"\n"
+        L"대여가능 여부: %lc\n"
+        L"도서번호: %ls\n"
+        L"\n"
+        L"등록하시겠습니까? ",
+        book->availability, book->number
+    );
+    wscanf(L"%ls", input_tmp[0]);
+
+    if (input_tmp[0][0] == L'Y' || input_tmp[0][0] == L'y')
+    {
+        data->books = insert_book(data->books, book);
+        save_books(data->books, STRING_BOOK_FILE);
+    }
+    else
+        destroy_book(book);
+
+    change_screen(data->screens, data->screens->pre_screen_type);
+}
 
 void draw_remove_book_screen(Data *data) 
 {
@@ -1834,7 +1935,7 @@ void input_find_book_screen(const wchar_t *input, Data *data)
     print_books(current_books);
     if (current_books != data->books)
         destroy_list(current_books);
-    sleep(3);
+    sleep(5);
 }
 
 void draw_modify_client_screen(Data *data)
@@ -1845,6 +1946,9 @@ void draw_modify_client_screen(Data *data)
 }
 void input_modify_client_screen(const wchar_t *input, Data *data)
 {
+    if (input == NULL || data == NULL)
+        return;
+
     wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
     wchar_t *input_p = NULL;
     size_t len = 0;
