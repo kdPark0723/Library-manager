@@ -972,7 +972,8 @@ void print_borrows(const LinkedList *borrow_list)
     return ;
 }
 
-Client save_clients(const LinkedList const *client_list, const char const *file_name) {
+void save_clients(const LinkedList const *client_list, const char const *file_name)
+{
     if (client_list == NULL)
         return;
 
@@ -993,7 +994,7 @@ Client save_clients(const LinkedList const *client_list, const char const *file_
         current_member = current_member->next;
         client = current_member->contents;
     }
-    close(file);
+    fclose(file);
 }
 
 void save_books(const LinkedList *book_list, const char *file_name)
@@ -1257,7 +1258,7 @@ LinkedList *remove_borrow(LinkedList *borrow_list, Borrow *borrow)
 
 void destroy_list(LinkedList *list)
 {
-    LinkedList before_node = NULL;
+    LinkedList* before_node = NULL;
     while (list != NULL)
     {
         before_node = list;
