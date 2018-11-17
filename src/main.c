@@ -1772,9 +1772,38 @@ void input_regist_book_screen(const wchar_t *input, Data *data)
     if (input == NULL || data == NULL)
         return;
 
-    wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
-    wchar_t *input_p = NULL;
-    size_t len = 0;
+    wchar_t input_tmp[4][SIZE_INPUT_MAX] = {0};
+    Book *book;
+
+    wprintf(L"출판사: ");
+    wscanf(L"%ls", input_tmp[0]);
+    wprintf(L"저자명: ");
+    wscanf(L"%ls", input_tmp[1]);
+    wprintf(L"ISBN: ");
+    wscanf(L"%ls", input_tmp[2]);
+    wprintf(L"소장처: ");
+    wscanf(L"%ls", input_tmp[3]);
+
+    book =  create_book(data->books, input, input_tmp[0], input_tmp[1], input_tmp[2], input_tmp[3]);
+
+    wprintf(
+        L"\n"
+        L"자동입력 사항\n"
+        L"\n"
+        L"대여가능 여부: %lc\n"
+        L"도서번호: %ls\n"
+        L"\n"
+        L"등록하시겠습니까? ",
+        book->availability, book->number
+    );
+    wscanf(L"%ls", input_tmp[0]);
+
+    if (input_tmp[0][0] == L'Y' || input_tmp[0][0] == L'y')
+        data->books = insert_book(data->books, book);
+    else
+        destroy_book(book);
+
+    change_screen(data->screens, data->screens->pre_screen_type);
 }
 
 void draw_remove_book_screen(Data *data) {}
