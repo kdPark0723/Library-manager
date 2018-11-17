@@ -1953,7 +1953,8 @@ void input_remove_book_screen(const wchar_t *input, Data *data)
     }
     if (book->availability == L'Y')
     {
-        remove_book(data->books, book);
+        data->books = remove_book(data->books, book);
+        save_books(data->books, STRING_BOOK_FILE);
         wprintf(L"삭제되었습니다.\n");
     }
     else
@@ -1971,9 +1972,6 @@ void draw_borrow_book_screen(Data *data)
 }
 void input_borrow_book_screen(const wchar_t *input, Data *data)
 {
-=======
->>>>>>> cb467b7528d70929ed72fe82aa431bce104ebb08
-
 }
 
 void draw_return_book_screen(Data *data)
