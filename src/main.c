@@ -1962,7 +1962,7 @@ void input_remove_book_screen(const wchar_t *input, Data *data)
         
     if (current_books != data->books)
         destroy_list(current_books);
-    sleep(5);
+    sleep(1);
     change_screen(data->screens, data->screens->pre_screen_type);
 }
 
@@ -1982,6 +1982,7 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
     wchar_t find_data[SIZE_INPUT_MAX] = {0};
     LinkedList *current_books = NULL;
 
+    clear_screen();
     switch (input[0])
     {
     case L'1':
@@ -2116,6 +2117,7 @@ void input_find_book_screen(const wchar_t *input, Data *data)
     wchar_t find_data[SIZE_INPUT_MAX] = {0};
     LinkedList *current_books = NULL;
 
+    clear_screen();
     switch (input[0])
     {
     case L'1':
@@ -2173,8 +2175,6 @@ void input_modify_client_screen(const wchar_t *input, Data *data)
         free(data->login_client->name);
     if (data->login_client->address != NULL)
         free(data->login_client->address);
-    if (data->login_client->phone_number != NULL)
-        free(data->login_client->phone_number);
 
     len = wcslen(input);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
