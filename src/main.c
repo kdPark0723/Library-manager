@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>d
+#include <stdbool.h>
 #include <string.h>
 #include <wchar.h>
 #include <time.h>
