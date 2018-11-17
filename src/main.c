@@ -2044,9 +2044,10 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
         wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
         wscanf(L"%ls", input_tmp[0]);
 
-        if (input_tmp[0][0] == L'Y' || input_tmp[0][0] == L'y')
+        if (input_tmp[0] == L'Y' || input_tmp[0] == L'y')
         {
-            data->borrows = init_borrows(create_borrow(student, book);
+            data->borrows = insert_borrow(data->borrows, create_borrow(student, book));
+            book->availability = L'N';
             save_borrows(data->borrows, STRING_BORROW_FILE);
             wprintf(L"대여되었습니다.\n");
         }
