@@ -1761,8 +1761,21 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
     }
 }
 
-void draw_regist_book_screen(Data *data) {}
-void input_regist_book_screen(const wchar_t *input, Data *data) {}
+void draw_regist_book_screen(Data *data)
+{
+    wprintf(
+        L">> 도서 등록 <<\n"
+        L"도서명: ");
+}
+void input_regist_book_screen(const wchar_t *input, Data *data)
+{
+    if (input == NULL || data == NULL)
+        return;
+
+    wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
+    wchar_t *input_p = NULL;
+    size_t len = 0;
+}
 
 void draw_remove_book_screen(Data *data) {}
 void input_remove_book_screen(const wchar_t *input, Data *data) {}
@@ -1837,6 +1850,9 @@ void draw_modify_client_screen(Data *data)
 }
 void input_modify_client_screen(const wchar_t *input, Data *data)
 {
+    if (input == NULL || data == NULL)
+        return;
+
     wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
     wchar_t *input_p = NULL;
     size_t len = 0;
