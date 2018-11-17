@@ -853,7 +853,15 @@ Borrow *create_borrow(Client *client, Book *book)
     return borrow_p;
 }
 
-void print_client(const Client *client) { }
+
+void print_client(const Client *client) 
+{
+     wprintf(
+        L"학번 : %ls \n"
+        L"이름 : %ls \n"
+        L"주소 : %ls \n",
+        client->student_number, client->name, client->address);
+}
 void print_book(const Book *book)
 {
     wprintf(
