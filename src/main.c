@@ -1968,10 +1968,98 @@ void input_remove_book_screen(const wchar_t *input, Data *data)
 
 void draw_borrow_book_screen(Data *data)
 {
-
+    wprintf(
+        L">> 도서 대여 <<\n"
+        L"1. 도서명 검색    2. ISBN 검색\n"
+        L"\n"
+        L"검색 번호를 입력하세요: ");
 }
 void input_borrow_book_screen(const wchar_t *input, Data *data)
 {
+    if (input == NULL || data == NULL)
+        return;
+
+    wchar_t find_data[SIZE_INPUT_MAX] = {0};
+    LinkedList *current_books = NULL;
+
+    switch (input[0])
+    {
+    case L'1':
+        wprintf(L"도서명을 입력하세요: ");
+        wscanf(L"%ls", find_data);
+        current_books = find_books_by_name(data->books, find_data);
+        break;
+    case L'2':
+        wprintf(L"ISBN을 입력하세요: ");
+        wscanf(L"%ls", find_data);
+        current_books = find_books_by_ISBN(data->books, find_data);
+        break;
+    default:
+        return;
+    }
+
+    wprintf(L">> 검색 결과 <<\n");
+    if (current_books == NULL)
+    {
+        wprintf(L"검색결과가 없습니다.\n");
+        sleep(1);
+        change_screen(data->screens, data->screens->pre_screen_type);
+        return;
+    }
+
+    const LinkedList *current = current_books;
+    wchar_t book_num[SIZE_BOOK_NUMBER+1] = {0};
+    wchar_t student_num[SIZE_STUDENT_NUMBER+1] = {0};
+    wprintf(L"도서번호: ");
+    while (current != NULL)
+    {
+        wprintf(L"%ls(대여 가능 여부 : %lc) ", ((Book *)current->contents)->number, ((Book *)current->contents)->availability);
+        current = current->next;
+    }
+    wprintf(
+        L"\n"
+        L"도서명 : %ls \n"
+        L"출판사 : %ls \n"
+        L"저자명 : %ls \n"
+        L"ISBN : %ls \n"
+        L"소장처 : %ls \n"
+        L"\n"
+        L" 학번을 입력하세요: ",
+        ((Book *)current_books->contents)->name, ((Book *)current_books->contents)->publisher, ((Book *)current_books->contents)->author, ((Book *)current_books->contents)->ISBN, ((Book *)current_books->contents)->location);
+    wscanf(L"%s", student_num);
+    wprintf(L"도서번호를 입력하세요: ");
+    wscanf(L"%s", book_num);
+    
+    Book *book = find_book_by_number(current_books, book_num);
+    Client *student = find_client_by_student_number(data->clients, student_num);
+    if (book == NULL || student)
+    {
+        wprintf(L"검색결과가 없습니다.\n");
+        sleep(1);
+        change_screen(data->screens, data->screens->pre_screen_type);
+        return;
+    }
+    if (book->availability == L'Y')
+    {
+        wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
+        wscanf(L"%ls", input_tmp[0]);
+
+        if (input_tmp[0][0] == L'Y' || input_tmp[0][0] == L'y')
+        {
+            data->borrows = init_borrows(create_borrow(student, book);
+            save_borrows(data->borrows, STRING_BORROW_FILE);
+            wprintf(L"대여되었습니다.\n");
+        }
+        else
+            wprintf(L"취소되었습니다.\n");
+    }
+    else
+        wprintf(L"이 도서는 대여할 수 없습니다.\n");
+        
+    if (current_books != data->books)
+        destroy_list(current_books);
+    sleep(5);
+    change_screen(data->screens, data->screens->pre_screen_type);
 }
 
 void draw_return_book_screen(Data *data)
