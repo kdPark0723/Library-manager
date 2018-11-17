@@ -912,18 +912,23 @@ Book *create_book(const LinkedList *book_list, const wchar_t *name, const wchar_
     wcscpy(book_p->ISBN, ISBN);
     book_p->availability = L'Y';
 
-    LinkedList *current = book_list->next; //여기서부터는 가장 최근의(큰) 도서번호를 구하는 과정임
-    LinkedList *largest = current;
+    const LinkedList *current = book_list; //여기서부터는 가장 최근의(큰) 도서번호를 구하는 과정임
+    const LinkedList *largest = current;
 
     while (current != NULL)
     {
+        current = current->next;
+        if (current == NULL)
+            break;
         if (wcscmp(((Book *)current->contents)->number, ((Book *)largest->contents)->number) > 0)
             largest = current;
-        current = current->next;
     }
 
     int largest_num;
-    swscanf(((Book *)(largest->contents))->number, L"%d", &largest_num);
+    if (book_list == NULL)
+        largest_num = 0;
+    else
+        swscanf(((Book *)(largest->contents))->number, L"%d", &largest_num);
     swprintf(book_p->number, SIZE_BOOK_NUMBER + 1, L"%07d", largest_num + 1);
 
     return book_p;
@@ -1799,7 +1804,10 @@ void input_regist_book_screen(const wchar_t *input, Data *data)
     wscanf(L"%ls", input_tmp[0]);
 
     if (input_tmp[0][0] == L'Y' || input_tmp[0][0] == L'y')
+    {
         data->books = insert_book(data->books, book);
+        save_books(data->books, STRING_BOOK_FILE);
+    }
     else
         destroy_book(book);
 
