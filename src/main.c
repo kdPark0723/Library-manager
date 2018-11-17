@@ -863,7 +863,7 @@ LinkedList *init_borrows(const char *file_name)
 
     while (ftell(file_pointer) != EOF)
     {
-       if (fwscanf(file_pointer, L"%ls | %ls | %ls | %lld | %lld | ", input[0], input[1], input[2], date[0], date[1]) == EOF)
+       if (fwscanf(file_pointer, L"%ls | %ls | %ls | %lld | %lld | ", input[0], input[1], input[2], &date[0], &date[1]) == EOF)
             break;
 
         node = malloc(sizeof(LinkedList));
@@ -2094,6 +2094,8 @@ void input_return_book_screen(const wchar_t *input, Data *data)
     else
         wprintf(L"취소하였습니다.\n");
 
+    if (current_books != data->books)
+        destroy_list(current_books);
     sleep(1);
     change_screen(data->screens, data->screens->pre_screen_type);
 }
