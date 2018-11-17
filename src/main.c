@@ -857,7 +857,7 @@ Borrow *create_borrow(Client *client, Book *book)
 void print_client(const Client *client) 
 {
     // admin이였을 때는 출력 하지 않음.
-    if (wcscmp("admin", client->student_number) == 0)
+    if (wcscmp(L"admin", client->student_number) == 0)
         return;
     wprintf(
         L"학번 : %ls \n"
