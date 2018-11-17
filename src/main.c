@@ -856,6 +856,9 @@ Borrow *create_borrow(Client *client, Book *book)
 
 void print_client(const Client *client) 
 {
+    // admin이였을 때는 출력 하지 않음.
+    if (wcscmp("admin", client->student_number) == 0)
+        return;
     wprintf(
         L"학번 : %ls \n"
         L"이름 : %ls \n"
@@ -987,12 +990,12 @@ void save_clients(const LinkedList const *client_list, const char const *file_na
 
     while (current_member != NULL)
     {
+        client = current_member->contents;
         fwprintf(file,
             L"%ls | %ls | %ls | %ls | %ls |",
             client->student_number, client->password, client->name, client->address, client->phone_number);
 
         current_member = current_member->next;
-        client = current_member->contents;
     }
     fclose(file);
 }
@@ -1012,12 +1015,12 @@ void save_books(const LinkedList *book_list, const char *file_name)
 
     while (current_member != NULL)
     {
+        book = current_member->contents;
         fwprintf(file,
             L"%ls | %ls | %ls | %ls | %ls | %ls | %lc | ",
             book->number, book->name, book->publisher, book->author, book->ISBN, book->location, book->availability);
 
         current_member = current_member->next;
-        book = current_member->contents;
     }
     fclose(file);
 }
@@ -1036,12 +1039,12 @@ void save_borrows(const LinkedList *borrow_list, const char *file_name)
 
     while (current_member != NULL)
     {
+        borrow = current_member->contents;
         fwprintf(file,
             L"%ls | %ls | %lld | %lld | ",
             borrow->book_name, borrow->book_number, (long long)(borrow->loan_date), (long long)(borrow->return_date));
 
         current_member = current_member->next;
-        borrow = current_member->contents;
     }
     fclose(file);
 }
