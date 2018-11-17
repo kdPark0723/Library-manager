@@ -57,8 +57,8 @@ typedef struct _LinkedList LinkedList;
 
 typedef struct Client
 {
-    wchar_t student_number[SIZE_STUDENT_NUMBER+1];
-    wchar_t phone_number[SIZE_PHONE_NUMBER+1];
+    wchar_t student_number[SIZE_STUDENT_NUMBER + 1];
+    wchar_t phone_number[SIZE_PHONE_NUMBER + 1];
     wchar_t *password;
     wchar_t *name;
     wchar_t *address;
@@ -66,8 +66,8 @@ typedef struct Client
 
 typedef struct Book
 {
-    wchar_t number[SIZE_BOOK_NUMBER+1];
-    wchar_t ISBN[SIZE_ISBN+1];
+    wchar_t number[SIZE_BOOK_NUMBER + 1];
+    wchar_t ISBN[SIZE_ISBN + 1];
     wchar_t availability;
     wchar_t *name;
     wchar_t *publisher;
@@ -77,8 +77,8 @@ typedef struct Book
 
 typedef struct Borrow
 {
-    wchar_t student_number[SIZE_STUDENT_NUMBER+1];
-    wchar_t book_number[SIZE_BOOK_NUMBER+1];
+    wchar_t student_number[SIZE_STUDENT_NUMBER + 1];
+    wchar_t book_number[SIZE_BOOK_NUMBER + 1];
     wchar_t *book_name;
     time_t loan_date;
     time_t return_date;
@@ -89,8 +89,8 @@ struct Screens;
 typedef struct Data
 {
     LinkedList *clients, *books, *borrows;
-    struct Screens* screens;
-    Client* login_client;
+    struct Screens *screens;
+    Client *login_client;
     _Bool is_running;
     _Bool is_admin;
 } Data;
@@ -722,7 +722,7 @@ int main(void)
 {
     Data data;
 
-    setlocale(LC_ALL , "");
+    setlocale(LC_ALL, "");
 
     data.clients = init_clients(STRING_CLIENT_FILE);
     data.books = init_books(STRING_BOOK_FILE);
@@ -746,7 +746,6 @@ int main(void)
 
     destroy_screens(data.screens);
 
-
     return 0;
 }
 
@@ -761,7 +760,7 @@ LinkedList *init_clients(const char *file_name)
     LinkedList *first_node = NULL;
     LinkedList *pre_node = NULL;
     Client *client = NULL;
-    wchar_t input[5][SIZE_INPUT_MAX] = { 0 };
+    wchar_t input[5][SIZE_INPUT_MAX] = {0};
 
     while (ftell(file_pointer) != EOF)
     {
@@ -776,13 +775,13 @@ LinkedList *init_clients(const char *file_name)
 
         wcscpy(client->student_number, input[0]);
 
-        client -> password = malloc(sizeof(wchar_t) * (wcslen(input[1]) + 1));
+        client->password = malloc(sizeof(wchar_t) * (wcslen(input[1]) + 1));
         wcscpy(client->password, input[1]);
 
-        client -> name = malloc(sizeof(wchar_t) * (wcslen(input[2]) + 1));
+        client->name = malloc(sizeof(wchar_t) * (wcslen(input[2]) + 1));
         wcscpy(client->name, input[2]);
 
-        client -> address = malloc(sizeof(wchar_t) * (wcslen(input[3]) + 1));
+        client->address = malloc(sizeof(wchar_t) * (wcslen(input[3]) + 1));
         wcscpy(client->address, input[3]);
 
         wcscpy(client->phone_number, input[4]);
@@ -797,12 +796,100 @@ LinkedList *init_clients(const char *file_name)
     return first_node;
 }
 LinkedList *init_books(const char *file_name)
-{ 
-    return NULL;
+{
+    FILE *file_pointer;
+    file_pointer = fopen(file_name, "r+");
+    if (file_pointer == NULL)
+        return NULL;
+
+    LinkedList *node = NULL;
+    LinkedList *first_node = NULL;
+    LinkedList *pre_node = NULL;
+    Book *book = NULL;
+    wchar_t input[6][SIZE_INPUT_MAX] = {0};
+    wchar_t availability;
+
+    while (ftell(file_pointer) != EOF)
+    {
+        if (fwscanf(file_pointer, L"%ls | %ls | %ls | %ls | %ls | %ls | %lc | ", input[0], input[1], input[2], input[3], input[4], input[5], &availability) == EOF)
+            break;
+
+        node = malloc(sizeof(LinkedList));
+        node->next = NULL;
+        if (first_node == NULL)
+            first_node = node;
+        book = malloc(sizeof(Book));
+
+        wcscpy(book->number, input[0]);
+
+        book->name = malloc(sizeof(wchar_t) * (wcslen(input[1]) + 1));
+        wcscpy(book->name, input[1]);
+
+        book->publisher = malloc(sizeof(wchar_t) * (wcslen(input[2]) + 1));
+        wcscpy(book->publisher, input[2]);
+
+        book->author = malloc(sizeof(wchar_t) * (wcslen(input[3]) + 1));
+        wcscpy(book->author, input[3]);
+
+        wcscpy(book->ISBN, input[4]);
+
+        book->location = malloc(sizeof(wchar_t) * (wcslen(input[3]) + 1));
+        wcscpy(book->location, input[5]);
+
+        book->availability = availability;
+
+        node->contents = (void *)book;
+        if (pre_node != NULL)
+            pre_node->next = node;
+        pre_node = node;
+    }
+
+    fclose(file_pointer);
+    return first_node;
 }
 LinkedList *init_borrows(const char *file_name)
 {
-    return NULL;
+    FILE *file_pointer;
+    file_pointer = fopen(file_name, "r+");
+    if (file_pointer == NULL)
+        return NULL;
+
+    LinkedList *node = NULL;
+    LinkedList *first_node = NULL;
+    LinkedList *pre_node = NULL;
+    Borrow *borrow = NULL;
+    wchar_t input[3][SIZE_INPUT_MAX] = {0};
+    long long date[2] = {0};
+
+    while (ftell(file_pointer) != EOF)
+    {
+       if (fwscanf(file_pointer, L"%ls | %ls | %ls | %lld | %lld | ", input[0], input[1], input[2], date[0], date[1]) == EOF)
+            break;
+
+        node = malloc(sizeof(LinkedList));
+        node->next = NULL;
+        if (first_node == NULL)
+            first_node = node;
+        borrow = malloc(sizeof(Borrow));
+
+        wcscpy(borrow->student_number, input[0]);
+
+        borrow->book_name = malloc(sizeof(wchar_t) * (wcslen(input[1]) + 1));
+        wcscpy(borrow->book_name, input[1]);
+
+        wcscpy(borrow->book_number, input[2]);
+
+        borrow->loan_date = (time_t)date[0];
+        borrow->return_date = (time_t)date[1];
+
+        node->contents = (void *)borrow;
+        if (pre_node != NULL)
+            pre_node->next = node;
+        pre_node = node;
+    }
+
+    fclose(file_pointer);
+    return first_node;
 }
 
 Book *create_book(const LinkedList *book_list, const wchar_t *name, const wchar_t *publisher, const wchar_t *author, const wchar_t *ISBN, const wchar_t *location)
@@ -825,7 +912,7 @@ Book *create_book(const LinkedList *book_list, const wchar_t *name, const wchar_
     wcscpy(book_p->ISBN, ISBN);
     book_p->availability = L'Y';
 
-    LinkedList *current = book_list->next;//여기서부터는 가장 최근의(큰) 도서번호를 구하는 과정임
+    LinkedList *current = book_list->next; //여기서부터는 가장 최근의(큰) 도서번호를 구하는 과정임
     LinkedList *largest = current;
 
     while (current != NULL)
@@ -843,7 +930,7 @@ Book *create_book(const LinkedList *book_list, const wchar_t *name, const wchar_
 }
 Borrow *create_borrow(Client *client, Book *book)
 {
-    Borrow * borrow_p = (Borrow *)malloc(sizeof(Borrow));
+    Borrow *borrow_p = (Borrow *)malloc(sizeof(Borrow));
     borrow_p->loan_date = time(NULL);
     struct tm *t;
     t = localtime(&borrow_p->loan_date);
@@ -861,8 +948,7 @@ Borrow *create_borrow(Client *client, Book *book)
     return borrow_p;
 }
 
-
-void print_client(const Client *client) 
+void print_client(const Client *client)
 {
     // admin이였을 때는 출력 하지 않음.
     if (wcscmp(L"admin", client->student_number) == 0)
@@ -887,7 +973,7 @@ void print_book(const Book *book)
 }
 void print_borrow(const Borrow *borrow)
 {
-    struct tm * loan_tm, *return_tm;
+    struct tm *loan_tm, *return_tm;
 
     loan_tm = localtime(&(borrow->loan_date));
     return_tm = localtime(&(borrow->return_date));
@@ -955,11 +1041,11 @@ void print_borrow(const Borrow *borrow)
 void print_clients(const LinkedList *client_list)
 {
     const LinkedList *current = client_list;
-    while (current !=NULL)
+    while (current != NULL)
     {
         wprintf(L"\n");
         print_client(current->contents);
-        current =current->next;
+        current = current->next;
     }
     return;
 }
@@ -980,10 +1066,10 @@ void print_borrows(const LinkedList *borrow_list)
     while (current != NULL)
     {
         wprintf(L"\n");
-        print_borrow (current->contents);
-        current = current -> next;
+        print_borrow(current->contents);
+        current = current->next;
     }
-    return ;
+    return;
 }
 
 void save_clients(const LinkedList const *client_list, const char const *file_name)
@@ -1051,8 +1137,8 @@ void save_borrows(const LinkedList *borrow_list, const char *file_name)
     {
         borrow = current_member->contents;
         fwprintf(file,
-            L"%ls | %ls | %lld | %lld | ",
-            borrow->book_name, borrow->book_number, (long long)(borrow->loan_date), (long long)(borrow->return_date));
+            L"%ls | %ls | %ls | %lld | %lld | ",
+            borrow->student_number, borrow->book_name, borrow->book_number, (long long)(borrow->loan_date), (long long)(borrow->return_date));
 
         current_member = current_member->next;
     }
@@ -1152,8 +1238,8 @@ Client *find_client_by_student_number(const LinkedList *client_list, const wchar
     if (client_list == NULL || student_number == NULL)
         return 0;
 
-    const LinkedList * current = client_list;
-    Client * client;
+    const LinkedList *current = client_list;
+    Client *client;
     while (current != NULL)
     {
         if (wcscmp(((Client *)current->contents)->student_number, student_number) != 0)
@@ -1226,32 +1312,32 @@ LinkedList *find_borrows_by_client(const LinkedList *borrow_list, Client *client
 {
     if (borrow_list == NULL || client == NULL)
         return 0;
-    
-    LinkedList * result = NULL;
-    
+
+    LinkedList *result = NULL;
+
     for (const LinkedList *current = borrow_list; current != NULL; current = current->next)
         if (wcscmp(((Borrow *)current->contents)->student_number, client->student_number) == 0)
             result = insert_borrow(result, (Borrow *)current->contents);
-    
+
     return result;
 }
 Borrow *find_borrow(const LinkedList *borrow_list, Client *client, Book *book)
 {
-    if (borrow_list==NULL || client == NULL || book == NULL)
+    if (borrow_list == NULL || client == NULL || book == NULL)
         return 0;
-    
-    Borrow * borrow = NULL ;
-    
+
+    Borrow *borrow = NULL;
+
     for (const LinkedList *current = borrow_list; current != NULL; current = current->next)
-        if (wcscmp(((Borrow *)current->contents)->student_number, client->student_number) == 0 && wcscmp(((Borrow *)current->contents)->book_number, book->number)==0)
+        if (wcscmp(((Borrow *)current->contents)->student_number, client->student_number) == 0 && wcscmp(((Borrow *)current->contents)->book_number, book->number) == 0)
         {
             borrow = (Borrow *)current->contents;
             break;
         }
     if (borrow == NULL)
-        return NULL;//결과 없음
-    
-    return borrow;      
+        return NULL; //결과 없음
+
+    return borrow;
 }
 
 LinkedList *remove_client(LinkedList *client_list, Client *client)
@@ -1269,7 +1355,7 @@ LinkedList *remove_borrow(LinkedList *borrow_list, Borrow *borrow)
 
 void destroy_list(LinkedList *list)
 {
-    LinkedList* before_node = NULL;
+    LinkedList *before_node = NULL;
     while (list != NULL)
     {
         before_node = list;
@@ -1285,7 +1371,7 @@ void destroy_clients(LinkedList *client_list, const char *file_name)
     while (current != NULL)
     {
         destroy_client((Client *)current->contents);
-        current = current -> next;
+        current = current->next;
     }
     destroy_list(client_list);
 }
@@ -1296,7 +1382,7 @@ void destroy_books(LinkedList *book_list, const char *file_name)
     while (current != NULL)
     {
         destroy_book((Book *)current->contents);
-        current = current -> next;
+        current = current->next;
     }
     destroy_list(book_list);
 }
@@ -1307,7 +1393,7 @@ void destroy_borrows(LinkedList *borrow_list, const char *file_name)
     while (current != NULL)
     {
         destroy_borrow((Borrow *)current->contents);
-        current = current ->next;
+        current = current->next;
     }
     destroy_list(borrow_list);
 }
@@ -1416,7 +1502,7 @@ void draw_screen(Screens *screens, Data *data)
 }
 void input_screen(Screens *screens, Data *data)
 {
-    wchar_t input[SIZE_INPUT_MAX] = { 0 };
+    wchar_t input[SIZE_INPUT_MAX] = {0};
     wscanf(L"%ls", input);
 
     screens->screens[screens->type].input(input, data);
@@ -1473,11 +1559,11 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     if (find_client_by_student_number(data->clients, input) != NULL)
     {
         wprintf(L"이미 존재하는 학번입니다.\n");
-        wscanf(L"");
+        sleep(3);
         change_screen(data->screens, SCREEN_INIT);
         return;
     }
-    wchar_t input_tmp[SIZE_INPUT_MAX] = { 0 };
+    wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
     wchar_t *input_p = NULL;
     size_t len = 0;
 
@@ -1513,7 +1599,7 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     data->clients = insert_client(data->clients, client);
     save_clients(data->clients, STRING_CLIENT_FILE);
     wprintf(L"회원가입이 되셨습니다.\n");
-    wscanf(L"");
+    sleep(3);
     change_screen(data->screens, SCREEN_INIT);
 }
 
@@ -1527,7 +1613,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
 {
     if (input == NULL || data == NULL)
         return;
-    wchar_t input_tmp[SIZE_INPUT_MAX] = { 0 };
+    wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
 
     Client *client = find_client_by_student_number(data->clients, input);
 
@@ -1549,7 +1635,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     if (client == NULL && !data->is_admin)
     {
         wprintf(L"회원정보가 없습니다.\n");
-        wscanf(L"");
+        sleep(3);
         change_screen(data->screens, SCREEN_INIT);
 
         return;
@@ -1561,7 +1647,7 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     if (data->is_admin)
     {
         wprintf(L"로그인이 되셨습니다.\n");
-        wscanf(L"");
+        sleep(3);
         change_screen(data->screens, SCREEN_MENU_ADMIN);
         return;
     }
@@ -1569,13 +1655,13 @@ void input_sign_in_screen(const wchar_t *input, Data *data)
     {
         data->login_client = client;
         wprintf(L"로그인이 되셨습니다.\n");
-        wscanf(L"");
+        sleep(3);
         change_screen(data->screens, SCREEN_MENU_MEMBER);
     }
     else
     {
         wprintf(L"잘못된 비밀번호입니다.\n");
-        wscanf(L"");
+        sleep(3);
         change_screen(data->screens, SCREEN_INIT);
     }
 }
@@ -1604,7 +1690,7 @@ void input_menu_member_screen(const wchar_t *input, Data *data)
         clear_screen();
         wprintf(L">> 내 대여 목록 <<\n");
         print_borrows(find_borrows_by_client(data->borrows, data->login_client));
-        wscanf(L"");
+        sleep(3);
         break;
     case L'3':
         change_screen(data->screens, SCREEN_MODIFY_CLIENT);
@@ -1662,7 +1748,7 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
     case L'6':
         wprintf(L">> 내 회원 목록 <<\n");
         print_clients(data->clients);
-        wscanf(L"");
+        sleep(3);
         break;
     case L'7':
         change_screen(data->screens, SCREEN_INIT);
@@ -1675,17 +1761,17 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
     }
 }
 
-void draw_regist_book_screen(Data *data) { }
-void input_regist_book_screen(const wchar_t *input, Data *data) { }
+void draw_regist_book_screen(Data *data) {}
+void input_regist_book_screen(const wchar_t *input, Data *data) {}
 
-void draw_remove_book_screen(Data *data) { }
-void input_remove_book_screen(const wchar_t *input, Data *data) { }
+void draw_remove_book_screen(Data *data) {}
+void input_remove_book_screen(const wchar_t *input, Data *data) {}
 
-void draw_borrow_book_screen(Data *data) { }
-void input_borrow_book_screen(const wchar_t *input, Data *data) { }
+void draw_borrow_book_screen(Data *data) {}
+void input_borrow_book_screen(const wchar_t *input, Data *data) {}
 
-void draw_return_book_screen(Data *data) { }
-void input_return_book_screen(const wchar_t *input, Data *data) { }
+void draw_return_book_screen(Data *data) {}
+void input_return_book_screen(const wchar_t *input, Data *data) {}
 
 void draw_find_book_screen(Data *data)
 {
@@ -1702,7 +1788,7 @@ void input_find_book_screen(const wchar_t *input, Data *data)
     if (input == NULL || data == NULL)
         return;
 
-    wchar_t find_data[SIZE_INPUT_MAX] = { 0 };
+    wchar_t find_data[SIZE_INPUT_MAX] = {0};
     LinkedList *current_books = NULL;
 
     switch (input[0])
@@ -1740,7 +1826,7 @@ void input_find_book_screen(const wchar_t *input, Data *data)
     print_books(current_books);
     if (current_books != data->books)
         destroy_list(current_books);
-    wscanf(L"");
+    sleep(3);
 }
 
 void draw_modify_client_screen(Data *data)
@@ -1751,7 +1837,7 @@ void draw_modify_client_screen(Data *data)
 }
 void input_modify_client_screen(const wchar_t *input, Data *data)
 {
-    wchar_t input_tmp[SIZE_INPUT_MAX] = { 0 };
+    wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
     wchar_t *input_p = NULL;
     size_t len = 0;
 
