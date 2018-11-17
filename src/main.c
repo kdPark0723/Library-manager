@@ -1998,7 +1998,7 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
         return;
     }
 
-    wprintf(L">> 검색 결과 <<\n");
+    wprintf(L"\n>> 검색 결과 <<\n");
     if (current_books == NULL)
     {
         wprintf(L"검색결과가 없습니다.\n");
@@ -2024,7 +2024,7 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
         L"ISBN : %ls \n"
         L"소장처 : %ls \n"
         L"\n"
-        L" 학번을 입력하세요: ",
+        L"학번을 입력하세요: ",
         ((Book *)current_books->contents)->name, ((Book *)current_books->contents)->publisher, ((Book *)current_books->contents)->author, ((Book *)current_books->contents)->ISBN, ((Book *)current_books->contents)->location);
     wscanf(L"%s", student_num);
     wprintf(L"도서번호를 입력하세요: ");
@@ -2032,7 +2032,7 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
     
     Book *book = find_book_by_number(current_books, book_num);
     Client *student = find_client_by_student_number(data->clients, student_num);
-    if (book == NULL || student)
+    if (book == NULL || student == NULL)
     {
         wprintf(L"검색결과가 없습니다.\n");
         sleep(1);
@@ -2042,12 +2042,14 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
     if (book->availability == L'Y')
     {
         wchar_t input_tmp[SIZE_INPUT_MAX] = {0};
-        wscanf(L"%ls", input_tmp[0]);
+        wprintf(L"이 도서를 대여합니까? ");
+        wscanf(L"%ls", input_tmp);
 
         if (input_tmp[0] == L'Y' || input_tmp[0] == L'y')
         {
             data->borrows = insert_borrow(data->borrows, create_borrow(student, book));
             book->availability = L'N';
+            save_books(data->books, STRING_BOOK_FILE);
             save_borrows(data->borrows, STRING_BORROW_FILE);
             wprintf(L"대여되었습니다.\n");
         }
@@ -2059,7 +2061,7 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
         
     if (current_books != data->books)
         destroy_list(current_books);
-    sleep(5);
+    sleep(1);
     change_screen(data->screens, data->screens->pre_screen_type);
 }
 
