@@ -765,7 +765,11 @@ LinkedList *init_clients(const char *file_name)
     while (ftell(file_pointer) != EOF)
     {
         if (fwscanf(file_pointer, L"%ls | %ls | %ls | %ls | %ls | ", input[0], input[1], input[2], input[3], input[4]) == EOF)
-            break;
+        /*if (fwscanf(file_pointer, L"%l[^|]| %l[^|]| %l[^|]| %l[^|]| %l[^|]| ", input[0], input[1], input[2], input[3], input[4]) == EOF)
+        오류 */ 
+            break;		
+        /*for (int i = 0; i <= 4; i++)
+            input[i][wcslen(input[i])-1] = L'\0'*/
 
         node = malloc(sizeof(LinkedList));
         node->next = NULL;
