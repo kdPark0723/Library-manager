@@ -1016,7 +1016,7 @@ void print_borrow(const Borrow *borrow)
         break;
     }
     wprintf(L"반납일자 : %d년 %d월 %d일 ", return_tm->tm_year + 1900, return_tm->tm_mon + 1, return_tm->tm_mday);
-    switch (loan_tm->tm_wday)
+    switch (return_tm->tm_wday)
     {
     case 0:
         wprintf(L"일요일\n");
