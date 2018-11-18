@@ -1577,7 +1577,7 @@ void draw_screen(Screens *screens, Data *data)
 void input_screen(Screens *screens, Data *data)
 {
     wchar_t input[SIZE_INPUT_MAX] = {0};
-    wscanf(L"%ls", input);
+	wscanf(L"\n%l[^\n]", input);
 
     screens->screens[screens->type].input(input, data);
 }
@@ -1646,29 +1646,28 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     wcscpy(client->student_number, input);
 
     wprintf(L"비밀번호: ");
-    wscanf(L"%ls", input_tmp);
+	wscanf(L"\n%l[^\n]", input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->password = input_p;
 
     wprintf(L"이름: ");
-    wscanf(L"%ls", input_tmp);
+	wscanf(L"\n%l[^\n]", input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->name = input_p;
 
     wprintf(L"주소: ");
-    fgetws(input_tmp,100,stdin);//앞의 wscanf에서 입력된 공백문자의 영향으로 fgetws가 하나만있으면 주소에 입력을 할수없음
-    fgetws(input_tmp,100,stdin);
+	wscanf(L"\n%l[^\n]", input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->address = input_p;
 
     wprintf(L"전화번호: ");
-    fgetws(input_tmp,100,stdin);
+	wscanf(L"\n%l[^\n]", input_tmp);
     wcscpy(client->phone_number, input_tmp);
 
     data->clients = insert_client(data->clients, client);
