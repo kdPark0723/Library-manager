@@ -984,8 +984,8 @@ void print_borrow(const Borrow *borrow)
     return_tm = localtime(&(borrow->return_date));
 
     wprintf(
-        L"도서번호 : %s \n"
-        L"도서명 : %s \n"
+        L"도서번호 : %ls \n"
+        L"도서명 : %ls \n"
         L"대여일자 : %d년 %d월 %d일 ",
         borrow->book_number, borrow->book_name, loan_tm->tm_year + 1900, loan_tm->tm_mon + 1, loan_tm->tm_mday);
 
