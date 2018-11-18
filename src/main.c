@@ -1660,14 +1660,15 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     client->name = input_p;
 
     wprintf(L"주소: ");
-    wscanf(L"%ls", input_tmp);
+    fgetws(input_tmp,100,stdin);//앞의 wscanf에서 입력된 공백문자의 영향으로 fgetws가 하나만있으면 주소에 입력을 할수없음
+    fgetws(input_tmp,100,stdin);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->address = input_p;
 
     wprintf(L"전화번호: ");
-    wscanf(L"%ls", input_tmp);
+    fgetws(input_tmp,100,stdin);
     wcscpy(client->phone_number, input_tmp);
 
     data->clients = insert_client(data->clients, client);
