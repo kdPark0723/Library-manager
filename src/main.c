@@ -1820,6 +1820,7 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
         change_screen(data->screens, SCREEN_FIND_BOOK);
         break;
     case L'6':
+        clear_screen();
         wprintf(L">> 내 회원 목록 <<\n");
         print_clients(data->clients);
         sleep(5);
@@ -1915,6 +1916,7 @@ void input_remove_book_screen(const wchar_t *input, Data *data)
         return;
     }
 
+    clear_screen();
     wprintf(L">> 검색 결과 <<\n");
     if (current_books == NULL)
     {
@@ -1999,6 +2001,7 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
         return;
     }
 
+    clear_screen();
     wprintf(L"\n>> 검색 결과 <<\n");
     if (current_books == NULL)
     {
@@ -2076,6 +2079,7 @@ void input_return_book_screen(const wchar_t *input, Data *data)
     LinkedList *borrows = find_borrows_by_client(data->borrows, student);
     wchar_t input_tmp[SIZE_BOOK_NUMBER+1] = {0};
 
+    clear_screen();
     wprintf(L"\n>> 회원의 대여 목록 <<\n");
     print_borrows(borrows);
     wprintf(L"\n반납할 도서번호를 입력하세요: ");
@@ -2149,6 +2153,7 @@ void input_find_book_screen(const wchar_t *input, Data *data)
     default:
         return;
     }
+    clear_screen();
     wprintf(L">> 검색 결과 <<\n");
     print_books(current_books);
     if (current_books != data->books)
