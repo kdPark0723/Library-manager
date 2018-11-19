@@ -1009,18 +1009,17 @@ void print_book(const Book *book)
 }
 void print_borrow(const Borrow *borrow)
 {
-    struct tm *loan_tm, *return_tm;
+    struct tm *t;
 
-    loan_tm = localtime(&(borrow->loan_date));
-    return_tm = localtime(&(borrow->return_date));
+    t = localtime(&(borrow->loan_date));
 
     wprintf(
         L"도서번호 : %ls \n"
         L"도서명 : %ls \n"
         L"대여일자 : %d년 %d월 %d일 ",
-        borrow->book_number, borrow->book_name, loan_tm->tm_year + 1900, loan_tm->tm_mon + 1, loan_tm->tm_mday);
+        borrow->book_number, borrow->book_name, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday);
 
-    switch (loan_tm->tm_wday)
+    switch (t->tm_wday)
     {
     case 0:
         wprintf(L"일요일\n");
@@ -1046,8 +1045,9 @@ void print_borrow(const Borrow *borrow)
     default:
         break;
     }
-    wprintf(L"반납일자 : %d년 %d월 %d일 ", return_tm->tm_year + 1900, return_tm->tm_mon + 1, return_tm->tm_mday);
-    switch (return_tm->tm_wday)
+    t = localtime(&(borrow->return_date));
+    wprintf(L"반납일자 : %d년 %d월 %d일 ", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday);
+    switch (t->tm_wday)
     {
     case 0:
         wprintf(L"일요일\n");
