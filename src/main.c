@@ -2051,9 +2051,9 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
         L"\n"
         L"학번을 입력하세요: ",
         ((Book *)current_books->contents)->name, ((Book *)current_books->contents)->publisher, ((Book *)current_books->contents)->author, ((Book *)current_books->contents)->ISBN, ((Book *)current_books->contents)->location);
-    wscanf(L"%s", student_num);
+    wscanf(L"%ls", student_num);
     wprintf(L"도서번호를 입력하세요: ");
-    wscanf(L"%s", book_num);
+    wscanf(L"%ls", book_num);
     
     Book *book = find_book_by_number(current_books, book_num);
     Client *student = find_client_by_student_number(data->clients, student_num);
