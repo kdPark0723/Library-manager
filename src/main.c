@@ -821,12 +821,17 @@ LinkedList *init_books(const char *file_name)
     LinkedList *first_node = NULL;
     LinkedList *pre_node = NULL;
     Book *book = NULL;
-    wchar_t input[6][SIZE_INPUT_MAX] = {0};
-    wchar_t availability;
+    wchar_t input[5][SIZE_INPUT_MAX] = {0};
+    wchar_t availability[2];
 
     while (ftell(file_pointer) != EOF)
     {
-        if (fwscanf(file_pointer, L"%ls | %ls | %ls | %ls | %ls | %ls | %lc | ", input[0], input[1], input[2], input[3], input[4], input[5], &availability) == EOF)
+        if (read_string_by_token(file_pointer, L" | ", 3, input[0]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[1]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[2]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[3]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[4]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, availability) == EOF)
             break;
 
         node = malloc(sizeof(LinkedList));
@@ -851,7 +856,7 @@ LinkedList *init_books(const char *file_name)
         book->location = malloc(sizeof(wchar_t) * (wcslen(input[3]) + 1));
         wcscpy(book->location, input[5]);
 
-        book->availability = availability;
+        book->availability = availability[0];
 
         node->contents = (void *)book;
         if (pre_node != NULL)
@@ -1866,13 +1871,13 @@ void input_regist_book_screen(const wchar_t *input, Data *data)
     Book *book;
 
     wprintf(L"출판사: ");
-    wscanf(L"%ls", input_tmp[0]);
+    read_string_by_token(stdin, L"\n", 1, input_tmp[0]);
     wprintf(L"저자명: ");
-    wscanf(L"%ls", input_tmp[1]);
+    read_string_by_token(stdin, L"\n", 1, input_tmp[1]);
     wprintf(L"ISBN: ");
-    wscanf(L"%ls", input_tmp[2]);
+    read_string_by_token(stdin, L"\n", 1, input_tmp[2]);
     wprintf(L"소장처: ");
-    wscanf(L"%ls", input_tmp[3]);
+    read_string_by_token(stdin, L"\n", 1, input_tmp[3]);
 
     book =  create_book(data->books, input, input_tmp[0], input_tmp[1], input_tmp[2], input_tmp[3]);
 
@@ -1919,7 +1924,7 @@ void input_remove_book_screen(const wchar_t *input, Data *data)
     {
     case L'1':
         wprintf(L"도서명을 입력하세요: ");
-        wscanf(L"%ls", find_data);
+        read_string_by_token(stdin, L"\n", 1, find_data);
         current_books = find_books_by_name(data->books, find_data);
         break;
     case L'2':
@@ -2004,7 +2009,7 @@ void input_borrow_book_screen(const wchar_t *input, Data *data)
     {
     case L'1':
         wprintf(L"도서명을 입력하세요: ");
-        wscanf(L"%ls", find_data);
+        read_string_by_token(stdin, L"\n", 1, find_data);
         current_books = find_books_by_name(data->books, find_data);
         break;
     case L'2':
@@ -2141,12 +2146,12 @@ void input_find_book_screen(const wchar_t *input, Data *data)
     {
     case L'1':
         wprintf(L"도서명을 입력하세요: ");
-        wscanf(L"%ls", find_data);
+        read_string_by_token(stdin, L"\n", 1, find_data);
         current_books = find_books_by_name(data->books, find_data);
         break;
     case L'2':
         wprintf(L"출판사를 입력하세요: ");
-        wscanf(L"%ls", find_data);
+        read_string_by_token(stdin, L"\n", 1, find_data);
         current_books = find_books_by_publisher(data->books, find_data);
         break;
     case L'3':
@@ -2156,7 +2161,7 @@ void input_find_book_screen(const wchar_t *input, Data *data)
         break;
     case L'4':
         wprintf(L"저자명을 입력하세요: ");
-        wscanf(L"%ls", find_data);
+        read_string_by_token(stdin, L"\n", 1, find_data);
         current_books = find_books_by_author(data->books, find_data);
         break;
     case L'5':
@@ -2202,14 +2207,14 @@ void input_modify_client_screen(const wchar_t *input, Data *data)
     data->login_client->name = input_p;
 
     wprintf(L"주소: ");
-    wscanf(L"%ls", input_tmp);
+    read_string_by_token(stdin, L"\n", 1, input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     data->login_client->address = input_p;
 
     wprintf(L"전화번호: ");
-    wscanf(L"%ls", input_tmp);
+    read_string_by_token(stdin, L"\n", 1, input_tmp);
     wcscpy(data->login_client->phone_number, input_tmp);
 
     save_clients(data->clients, STRING_CLIENT_FILE);
