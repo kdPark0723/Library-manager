@@ -879,14 +879,24 @@ LinkedList *init_borrows(const char *file_name)
     LinkedList *first_node = NULL;
     LinkedList *pre_node = NULL;
     Borrow *borrow = NULL;
-    wchar_t input[3][SIZE_INPUT_MAX] = {0};
+    wchar_t input[5][SIZE_INPUT_MAX] = {0};
     long long date[2] = {0};
 
     while (ftell(file_pointer) != EOF)
     {
-       if (fwscanf(file_pointer, L"%ls | %ls | %ls | %lld | %lld | ", input[0], input[1], input[2], &date[0], &date[1]) == EOF)
-            break;
 
+        if (read_string_by_token(file_pointer, L" | ", 3, input[0]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[1]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[2]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[3]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[4]) == EOF
+           )
+            break;
+        if (swscanf(input[3], L"%lld", &date[0]) == EOF ||
+            swscanf(input[4], L"%lld", &date[1]) == EOF
+           )
+            break;
+        
         node = malloc(sizeof(LinkedList));
         node->next = NULL;
         if (first_node == NULL)
