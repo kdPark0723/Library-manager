@@ -704,6 +704,17 @@ void draw_modify_client_screen(Data *data);
  */
 void input_modify_client_screen(const wchar_t *input, Data *data);
 
+/*  @brief Read string by token.
+ *
+ *  Read string by token.
+ *
+ *  @param file The file to get string.
+ *  @param token Token to divide string.
+ *  @param string String data.
+ *  @return int.
+ */
+int read_string_by_token(FILE *file, const wchar_t *token, const size_t len, wchar_t *string);
+
 /*   @prog Library manager
  *
  *   Library manager program for programming team project
@@ -764,12 +775,12 @@ LinkedList *init_clients(const char *file_name)
 
     while (ftell(file_pointer) != EOF)
     {
-        if (fwscanf(file_pointer, L"%ls | %ls | %ls | %ls | %ls | ", input[0], input[1], input[2], input[3], input[4]) == EOF)
-        /*if (fwscanf(file_pointer, L"%l[^|]| %l[^|]| %l[^|]| %l[^|]| %l[^|]| ", input[0], input[1], input[2], input[3], input[4]) == EOF)
-        오류 */ 
-            break;		
-        /*for (int i = 0; i <= 4; i++)
-            input[i][wcslen(input[i])-1] = L'\0'*/
+        if (read_string_by_token(file_pointer, L" | ", 3, input[0]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[1]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[2]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[3]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[4]) == EOF)
+            break;
 
         node = malloc(sizeof(LinkedList));
         node->next = NULL;
@@ -1581,7 +1592,7 @@ void draw_screen(Screens *screens, Data *data)
 void input_screen(Screens *screens, Data *data)
 {
     wchar_t input[SIZE_INPUT_MAX] = {0};
-    wscanf(L"\n%l[^\n]", input);
+    read_string_by_token(stdin, L"\n", 1, input);
 
     screens->screens[screens->type].input(input, data);
 }
@@ -1650,28 +1661,28 @@ void input_sign_up_screen(const wchar_t *input, Data *data)
     wcscpy(client->student_number, input);
 
     wprintf(L"비밀번호: ");
-    wscanf(L"\n%l[^\n]", input_tmp);
+    read_string_by_token(stdin, L"\n", 1, input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->password = input_p;
 
     wprintf(L"이름: ");
-    wscanf(L"\n%l[^\n]", input_tmp);
+    read_string_by_token(stdin, L"\n", 1, input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->name = input_p;
 
     wprintf(L"주소: ");
-    wscanf(L"\n%l[^\n]", input_tmp);
+    read_string_by_token(stdin, L"\n", 1, input_tmp);
     len = wcslen(input_tmp);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input_tmp);
     client->address = input_p;
 
     wprintf(L"전화번호: ");
-    wscanf(L"\n%l[^\n]", input_tmp);
+    read_string_by_token(stdin, L"\n", 1, input_tmp);
     wcscpy(client->phone_number, input_tmp);
 
     data->clients = insert_client(data->clients, client);
@@ -2205,4 +2216,30 @@ void input_modify_client_screen(const wchar_t *input, Data *data)
     wprintf(L"개인정보 수정이 되셨습니다.\n");
     sleep(1);
     change_screen(data->screens, SCREEN_MENU_MEMBER);
+}
+
+int read_string_by_token(FILE *file, const wchar_t *token, const size_t len, wchar_t *string)
+{
+    wchar_t input[SIZE_INPUT_MAX] = {0};
+    size_t now_char = 0;
+    size_t now_token = 0;
+
+    while (1)
+    {
+        if (now_char >= SIZE_INPUT_MAX || now_token >= len)
+            break;
+        if (fwscanf(file, L"%lc", &input[now_char]) == EOF)
+            return EOF;
+        if (token[now_token] == input[now_char])
+            now_token++;
+        else
+            now_token = 0;
+        now_char++;
+    }
+    if (now_token == len)
+        input[now_char - len] = L'\0';
+
+    wcscpy(string, input);
+
+    return 0;
 }
