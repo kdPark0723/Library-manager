@@ -2126,6 +2126,7 @@ void input_return_book_screen(const wchar_t *input, Data *data)
         book->availability = L'Y';
         save_books(data->books, STRING_BOOK_FILE);
         data->borrows = remove_borrow(data->borrows, find_borrow(data->borrows, student, book));
+        save_borrows(data->borrows, STRING_BORROW_FILE);
     }
     else
         wprintf(L"취소하였습니다.\n");
