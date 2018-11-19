@@ -821,7 +821,7 @@ LinkedList *init_books(const char *file_name)
     LinkedList *first_node = NULL;
     LinkedList *pre_node = NULL;
     Book *book = NULL;
-    wchar_t input[5][SIZE_INPUT_MAX] = {0};
+    wchar_t input[6][SIZE_INPUT_MAX] = {0};
     wchar_t availability[2];
 
     while (ftell(file_pointer) != EOF)
@@ -831,6 +831,7 @@ LinkedList *init_books(const char *file_name)
             read_string_by_token(file_pointer, L" | ", 3, input[2]) == EOF ||
             read_string_by_token(file_pointer, L" | ", 3, input[3]) == EOF ||
             read_string_by_token(file_pointer, L" | ", 3, input[4]) == EOF ||
+            read_string_by_token(file_pointer, L" | ", 3, input[5]) == EOF ||
             read_string_by_token(file_pointer, L" | ", 3, availability) == EOF)
             break;
 
@@ -853,7 +854,7 @@ LinkedList *init_books(const char *file_name)
 
         wcscpy(book->ISBN, input[4]);
 
-        book->location = malloc(sizeof(wchar_t) * (wcslen(input[3]) + 1));
+        book->location = malloc(sizeof(wchar_t) * (wcslen(input[5]) + 1));
         wcscpy(book->location, input[5]);
 
         book->availability = availability[0];
