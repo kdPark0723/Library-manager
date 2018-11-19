@@ -2114,12 +2114,12 @@ void input_return_book_screen(const wchar_t *input, Data *data)
     wprintf(L"\n>> 회원의 대여 목록 <<\n");
     print_borrows(borrows);
     wprintf(L"\n반납할 도서번호를 입력하세요: ");
-    wscanf(L"%s", input_tmp);
+    wscanf(L"%ls", input_tmp);
 
     Book *book = find_book_by_number(data->books, input_tmp);
 
     wprintf(L"도서 반납처리를 할까요? ");
-    wscanf(L"%s", input_tmp);
+    wscanf(L"%ls", input_tmp);
 
     if (input_tmp[0] == L'Y' || input_tmp[0] == L'y')
     {
