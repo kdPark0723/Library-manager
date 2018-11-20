@@ -2197,7 +2197,7 @@ void draw_modify_client_screen(Data *data)
 {
     wprintf(
         L">> 개인정보 수정 <<\n"
-        L"이름: ");
+        L"비밀번호: ");
 }
 void input_modify_client_screen(const wchar_t *input, Data *data)
 {
@@ -2208,15 +2208,15 @@ void input_modify_client_screen(const wchar_t *input, Data *data)
     wchar_t *input_p = NULL;
     size_t len = 0;
 
-    if (data->login_client->name != NULL)
-        free(data->login_client->name);
+    if (data->login_client->password != NULL)
+        free(data->login_client->password);
     if (data->login_client->address != NULL)
         free(data->login_client->address);
 
     len = wcslen(input);
     input_p = malloc(sizeof(wchar_t) * (len + 1));
     wcscpy(input_p, input);
-    data->login_client->name = input_p;
+    data->login_client->password = input_p;
 
     wprintf(L"주소: ");
     read_string_by_token(stdin, L"\n", 1, input_tmp);
