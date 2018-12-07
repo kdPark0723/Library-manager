@@ -1975,7 +1975,7 @@ void input_remove_book_screen(const wchar_t *input, Data *data)
         L"\n"
         L"삭제할 도서의 번호를 입력하세요: ",
         ((Book *)current_books->contents)->name, ((Book *)current_books->contents)->publisher, ((Book *)current_books->contents)->author, ((Book *)current_books->contents)->ISBN, ((Book *)current_books->contents)->location);
-    wscanf(L"%s", book_num);
+    wscanf(L"%ls", book_num);
     Book *book = find_book_by_number(current_books, book_num);
     if (book == NULL)
     {
