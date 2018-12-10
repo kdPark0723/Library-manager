@@ -1801,6 +1801,12 @@ void input_menu_member_screen(const wchar_t *input, Data *data)
         change_screen(data->screens, SCREEN_MODIFY_CLIENT);
         break;
     case L'4':
+        if (find_borrows_by_client(data->borrows, data->login_client) != NULL) {
+            clear_screen();
+            wprintf(L"대여중인 책이 있으니 탈퇴가 불가합니다\n");
+            sleep(5);
+            break;
+        }
         data->clients = remove_client(data->clients, data->login_client);
         data->login_client = NULL;
         save_clients(data->clients, STRING_CLIENT_FILE);
