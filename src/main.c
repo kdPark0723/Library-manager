@@ -282,6 +282,15 @@ LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow);
  *  @return Client* Fined client.
  */
 Client *find_client_by_student_number(const LinkedList *client_list, const wchar_t *student_number);
+/*  @brief Find client by student name.
+ *
+ *  Find client by student name.
+ *
+ *  @param client_list The client list to get client.
+ *  @param student_number The client's student name.
+ *  @return Client* Fined client.
+ */
+Client *find_client_by_name(const LinkedList *client_list, const wchar_t * name);
 /*  @brief Find books by name.
  *
  *  Find book by name.
@@ -1271,22 +1280,41 @@ LinkedList *insert_borrow(LinkedList *borrow_list, Borrow *borrow)
 
 Client *find_client_by_student_number(const LinkedList *client_list, const wchar_t *student_number)
 {
-    if (client_list == NULL || student_number == NULL)
-        return 0;
+	if (client_list == NULL || student_number == NULL)
+		return 0;
 
-    const LinkedList *current = client_list;
-    Client *client;
-    while (current != NULL)
-    {
-        if (wcscmp(((Client *)current->contents)->student_number, student_number) != 0)
-            current = current->next;
-        else
-        {
-            client = ((Client *)current->contents);
-            return client;
-        }
-    }
-    return 0;
+	const LinkedList *current = client_list;
+	Client *client;
+	while (current != NULL)
+	{
+		if (wcscmp(((Client *)current->contents)->student_number, student_number) != 0)
+			current = current->next;
+		else
+		{
+			client = ((Client *)current->contents);
+			return client;
+		}
+	}
+	return 0;
+}
+Client *find_client_by_name(const LinkedList *client_list, const wchar_t * name)
+{
+	if (client_list == NULL || name == NULL)
+		return 0;
+
+	const LinkedList *current = client_list;
+	Client *client;
+	while (current != NULL)
+	{
+		if (wcscmp(((Client *)current->contents)->name, name) != 0)
+			current = current->next;
+		else
+		{
+			client = ((Client *)current->contents);
+			return client;
+		}
+	}
+	return 0;
 }
 LinkedList *find_books_by_name(const LinkedList *book_list, const wchar_t *book_name)
 {
@@ -1802,12 +1830,12 @@ void input_menu_member_screen(const wchar_t *input, Data *data)
         break;
     case L'4':
         if (find_borrows_by_client(data->borrows, data->login_client) != NULL) {
-            clear_screen();
-            wprintf(L"대여중인 책이 있으니 탈퇴가 불가합니다\n");
-            sleep(5);
-            break;
+			clear_screen();
+			wprintf(L"대여중인 책이 있으니 탈퇴가 불가합니다\n");
+			sleep(5);
+			break;
         }
-        data->clients = remove_client(data->clients, data->login_client);
+		data->clients = remove_client(data->clients, data->login_client);
         data->login_client = NULL;
         save_clients(data->clients, STRING_CLIENT_FILE);
         change_screen(data->screens, SCREEN_INIT);
@@ -1858,10 +1886,55 @@ void input_menu_admin_screen(const wchar_t *input, Data *data)
         break;
     case L'6':
         clear_screen();
-        wprintf(L">> 내 회원 목록 <<\n");
-        print_clients(data->clients);
-        sleep(5);
-        break;
+		wprintf(
+			L">>회원 목록<<\n"
+			L"1. 이름 검색 2. 학번 검색\n"
+			L"3. 전체 검색 4. 이전 메뉴\n"
+			L"\n"
+			L"번호를 선택하세요: ");
+		wscanf(L"%ls", input);
+		Client * client;
+		switch (input[0])
+		{
+		case L'1':
+			clear_screen();
+			wprintf(L"이름을 입력하세요\n");
+			wscanf(L"%ls", input);
+			client = find_client_by_name(data->clients, input);
+			clear_screen();
+			if (client != NULL)
+				print_client(client);
+			else
+				wprintf(L"해당하는 회원이 없습니다\n");
+			sleep(5);
+			break;
+		case L'2':
+			clear_screen();
+			wprintf(L"학번을 입력하세요\n");
+			wscanf(L"%ls", input);
+			client = find_client_by_student_number(data->clients, input);
+			clear_screen();
+			if (client != NULL)
+				print_client(client);
+			else
+				wprintf(L"해당하는 회원이 없습니다\n");
+			sleep(5);
+			break;
+		case L'3':
+			clear_screen();
+			wprintf(L">> 내 회원 목록 <<\n");
+			print_clients(data->clients);
+			sleep(5);
+			break;
+		case L'4':
+			break;
+		default:
+			break;
+		}
+     change_screen(data->screens, SCREEN_MENU_ADMIN);
+	 break;
+
+
     case L'7':
         change_screen(data->screens, SCREEN_INIT);
         break;
