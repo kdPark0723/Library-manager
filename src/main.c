@@ -1123,7 +1123,7 @@ void save_clients(const LinkedList const *client_list, const char const *file_na
         return;
 
     FILE *file = NULL;
-    file = fopen(file_name, "w+");
+    file = fopen(file_name, "w");
     if (file == NULL)
         return;
 
@@ -1147,7 +1147,7 @@ void save_books(const LinkedList *book_list, const char *file_name)
         return;
 
     FILE *file = NULL;
-    file = fopen(file_name, "w+");
+    file = fopen(file_name, "w");
     if (file == NULL)
         return;
 
@@ -1171,7 +1171,7 @@ void save_borrows(const LinkedList *borrow_list, const char *file_name)
         return;
 
     FILE *file = NULL;
-    file = fopen(file_name, "w+");
+    file = fopen(file_name, "w");
     if (file == NULL)
         return;
 
