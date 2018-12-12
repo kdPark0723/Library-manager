@@ -1119,13 +1119,15 @@ void print_borrows(const LinkedList *borrow_list)
 
 void save_clients(const LinkedList const *client_list, const char const *file_name)
 {
-    if (client_list == NULL)
-        return;
-
     FILE *file = NULL;
     file = fopen(file_name, "w");
     if (file == NULL)
         return;
+    if (client_list == NULL)
+    {
+        fclose(file);
+        return;
+    } 
 
     const LinkedList *current_member = client_list;
     Client *client = current_member->contents;
@@ -1143,13 +1145,15 @@ void save_clients(const LinkedList const *client_list, const char const *file_na
 }
 void save_books(const LinkedList *book_list, const char *file_name)
 {
-    if (book_list == NULL)
-        return;
-
     FILE *file = NULL;
     file = fopen(file_name, "w");
     if (file == NULL)
         return;
+    if (book_list == NULL)
+    {
+        fclose(file);
+        return;
+    } 
 
     const LinkedList *current_member = book_list;
     Book *book = current_member->contents;
@@ -1167,13 +1171,15 @@ void save_books(const LinkedList *book_list, const char *file_name)
 }
 void save_borrows(const LinkedList *borrow_list, const char *file_name)
 {
-    if (borrow_list == NULL)
-        return;
-
     FILE *file = NULL;
     file = fopen(file_name, "w");
     if (file == NULL)
         return;
+    if (borrow_list == NULL)
+    {
+        fclose(file);
+        return;
+    } 
 
     const LinkedList *current_member = borrow_list;
     Borrow *borrow = current_member->contents;
